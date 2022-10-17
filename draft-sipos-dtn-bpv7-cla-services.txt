@@ -1,0 +1,1064 @@
+
+
+
+
+Delay-Tolerant Networking                                       B. Sipos
+Internet-Draft                                                   JHU/APL
+Intended status: Informational                           17 October 2022
+Expires: 20 April 2023
+
+
+      Bundle Protocol Expected Convergence Layer Adapter Services
+                  draft-sipos-dtn-bpv7-cla-services-00
+
+Abstract
+
+   This document attempts to harmonize the services expected of a
+   Convergence Layer Adapter (CLA) by an overlaying Bundle Protocol
+   Agent (BPA).  This harmonization is based on combining the various
+   existing CLA behaviors into a set of minimum expected service
+   interfaces.
+
+Status of This Memo
+
+   This Internet-Draft is submitted in full conformance with the
+   provisions of BCP 78 and BCP 79.
+
+   Internet-Drafts are working documents of the Internet Engineering
+   Task Force (IETF).  Note that other groups may also distribute
+   working documents as Internet-Drafts.  The list of current Internet-
+   Drafts is at https://datatracker.ietf.org/drafts/current/.
+
+   Internet-Drafts are draft documents valid for a maximum of six months
+   and may be updated, replaced, or obsoleted by other documents at any
+   time.  It is inappropriate to use Internet-Drafts as reference
+   material or to cite them other than as "work in progress."
+
+   This Internet-Draft will expire on 20 April 2023.
+
+Copyright Notice
+
+   Copyright (c) 2022 IETF Trust and the persons identified as the
+   document authors.  All rights reserved.
+
+   This document is subject to BCP 78 and the IETF Trust's Legal
+   Provisions Relating to IETF Documents (https://trustee.ietf.org/
+   license-info) in effect on the date of publication of this document.
+   Please review these documents carefully, as they describe your rights
+   and restrictions with respect to this document.  Code Components
+   extracted from this document must include Revised BSD License text as
+   described in Section 4.e of the Trust Legal Provisions and are
+   provided without warranty as described in the Revised BSD License.
+
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 1]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+Table of Contents
+
+   1.  Introduction  . . . . . . . . . . . . . . . . . . . . . . . .   2
+     1.1.  Scope . . . . . . . . . . . . . . . . . . . . . . . . . .   3
+     1.2.  Terminology . . . . . . . . . . . . . . . . . . . . . . .   3
+   2.  Convergence Layer Aspects . . . . . . . . . . . . . . . . . .   4
+   3.  Convergence Layer Adapter Services  . . . . . . . . . . . . .   5
+     3.1.  Bundle Transmission . . . . . . . . . . . . . . . . . . .   5
+     3.2.  Bundle Reception  . . . . . . . . . . . . . . . . . . . .   9
+     3.3.  Persistent Session Keeping  . . . . . . . . . . . . . . .  11
+     3.4.  Passive Listening . . . . . . . . . . . . . . . . . . . .  14
+   4.  Security Considerations . . . . . . . . . . . . . . . . . . .  15
+   5.  IANA Considerations . . . . . . . . . . . . . . . . . . . . .  15
+   6.  References  . . . . . . . . . . . . . . . . . . . . . . . . .  15
+     6.1.  Normative References  . . . . . . . . . . . . . . . . . .  15
+     6.2.  Informative References  . . . . . . . . . . . . . . . . .  16
+   Appendix A.  Applicability to Existing Convergence Layers . . . .  17
+     A.1.  UDPCL . . . . . . . . . . . . . . . . . . . . . . . . . .  17
+     A.2.  TCPCL . . . . . . . . . . . . . . . . . . . . . . . . . .  18
+     A.3.  LTPCL . . . . . . . . . . . . . . . . . . . . . . . . . .  19
+     A.4.  BIBE  . . . . . . . . . . . . . . . . . . . . . . . . . .  19
+   Acknowledgments . . . . . . . . . . . . . . . . . . . . . . . . .  19
+   Author's Address  . . . . . . . . . . . . . . . . . . . . . . . .  19
+
+1.  Introduction
+
+   Before this document, each convergence layer (CL) definition included
+   (or implied) its own set of specific services and primitives that
+   would be supported by an associated convergence layer adapter (CLA).
+   From the perspective of capabilities and behaviors of an individual
+   CLA this is sensible, but from the perspective of the Bundle Protocol
+   Agent (BPA) this lack of consistency in both capability and naming
+   makes the logical interface between BPA and its CLAs difficult to
+   manage and in many cases implementation dependent (both in capability
+   and in terminology).
+
+   The task of this document is thus to harmonize the CLA interface into
+   a set of distinct and consistently named services, each composed of
+   primitives inspired by the ISO naming convention of "request" meaning
+   a service user intending to invoke an activity on the service
+   provider and "indication" meaning the service provider giving status
+   of an activity to a service user.
+
+   Because the wide variety of transport mechanisms used across the
+   various CLs and their differing aspects (see Section 2) many of the
+   requests or indications do not apply and are not used or usable by
+   any particular CLA (see Appendix A for some examples).
+
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 2]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+1.1.  Scope
+
+   This document is based on existing CLs which transport over UDP
+   [RFC7122] [CCSDS-BP], TCP [RFC9174], LTP/UDP [RFC5326] [RFC7122], and
+   BIBE [I-D.ietf-dtn-bibect].
+
+   This document does not specify any additional services needed of
+   existing CL specifications.  In cases where existing CLs deviate from
+   these service definitions it represents a possible future enhancement
+   to the CL to harmonize it with these idealized services.
+
+1.2.  Terminology
+
+   The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT",
+   "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and
+   "OPTIONAL" in this document are to be interpreted as described in BCP
+   14 [RFC2119] [RFC8174] when, and only when, they appear in all
+   capitals, as shown here.
+
+   The following are definitions necessary to understand the services
+   and functions in this document.
+
+   Bundle Protocol:  The definition of the data contained in bundles and
+      the encoding of that data.
+
+   Bundle Protocol Agent:  The entity which performs the functions of
+      the bundle protocol.
+
+   Convergence Layer:  The definition of how an encoded bundle can be
+      transferred over a particular underlying transport.
+
+   Convergence Layer Adapter:  The entity which performs the functions
+      of a specific convergence layer.
+
+   Transfer:  The activity of one CLA transmitting and some number of
+      CLAs receiving a bundle.
+
+   Transmission:  A transfer from the perspective of the transmitting
+      CLA.
+
+   Transmission ID:  A unique identifier for a specific Bundle
+      Transmission service instance.
+
+   Reception:  A transfer from the perspective of the receiving CLA.
+
+   Reception ID:  A unique identifier for a specific Bundle Reception
+      service instance.
+
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 3]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+   Session:  A persistent connection of a transport along with
+      additional CLA state related to that connection.
+
+   Session ID:  A unique identifier for a specific Persistent Session
+      Keeping service instance.
+
+2.  Convergence Layer Aspects
+
+   This section attempts to categorize existing CLs by a few different
+   critical aspects of their behavior.  This expands on the general
+   terminology of Section 1.2 with definitions specific to those
+   aspects.
+
+   There is currently no concept of a "streaming" CL.  All CLAs must
+   operate with bundles as their service data unit (SDU) so must behave
+   as a datagram service to the BPA.  In the case where the underlying
+   transport is an octet stream (_e.g._, the TCPCL using TCP) the CL
+   itself must encapsulate the encoded bundles into the transport
+   stream.
+
+   Reliable or Unreliable  The reliability of a CL is determined by
+      whether or not the CLA transmitting a bundle has a positive
+      indication of the reception of the bundle above the transport
+      itself.  For example, it is not enough for TCP to acknowledge that
+      the TCP/IP stack has received the segment; the CLA MUST have
+      feedback from the receiving BPA that the bundle has progressed all
+      the way "into the receiving node."
+
+   Atomic or Segmented  Although the reliability of a CL is at the level
+      of the entire bundle, some CLs also provide segmentation of the
+      bundle data in order to provide additional capabilities such as
+      selective retransmission, intermediate progress, or interleaving
+      of transfers on the same stream.  In the absence of segmentation a
+      CL performs its transfers atomically; either all or nothing.
+
+   Connection-oriented or Connectionless  Some CLs operate over
+      transports that require establishment of connections before
+      transfers can be made, while other CLs operate on connectionless
+      transports which can transfer datagrams unsolicited.  In some
+      cases a security association can necessitate a connection-like
+      shared state between peers.  Even for connectionless transports
+      there can be recommendations about "conversation" state keeping to
+      allow the transport to operate consistently through middleboxes.
+
+   Unicast or Multicast  At the network level, some CLs can only operate
+      properly with a unicast next-hop destination.  For many reliable
+      transports, this is a natural limitation of the protocol.  Other
+      transports can operate with multicast (or broadcast) destinations
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 4]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+      either because they are not reliable (_e.g._, UDP or LTP green-
+      part) or because they use a multicast-aware retransmission scheme
+      (_e.g._, NORM [RFC5740]).
+
+   Size Limitations  The BPv7 specification [RFC9171] does not impose an
+      upper-bound on either the size of the payload data or the size of
+      the overall encoded bundle.  Despite this, some CLs have a natural
+      upper bound on the size of bundle which can be transferred.  In
+      other cases, a profile of the CL can reduce the effective upper
+      bound of bundle size.
+
+      While the LTPCL and TCPCL technically allow a 64-bit transfer
+      size, the UDPCL by its nature is limited to 64KiB on IPv4 and only
+      in certain circumstances can be enlarged on IPv6 jumbograms
+      Section 4 of [RFC2675].  Large datagram sizes however will run
+      into path MTU and fragmentation issues [RFC8900].
+
+3.  Convergence Layer Adapter Services
+
+   Each of the following subsections defines an independent service
+   provided by a CLA to a BPA.  Depending on the mechanics of the
+   specific CLA, not all of the requests or indications listed here will
+   be meaningful or used.
+
+3.1.  Bundle Transmission
+
+   The principal purpose of any CLA is to allow a BPA to transmit bundle
+   data to a peer node's BPA.  Because of this, all CLAs SHALL support
+   the Bundle Transmission service.
+
+   Each transmission is a time-bounded activity to transfer a bundle
+   from the local CLA to a peer CLA.  Transmissions are always initiated
+   by the local BPA, and it is out of scope of this document to
+   determine when a bundle is ready for transmission over a particular
+   CLA to a particular peer.
+
+   Each transmission is identified by a CLA-defined transmission ID
+   which is unique within the context of a single BPA--CLA association.
+   The bundle identity is not a sufficient transmission ID because a CLA
+   can request duplicated transmissions (across time or simultaneously)
+   of the same bundle from the same CLA.
+
+
+
+
+
+
+
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 5]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+                    +---------------+              error
+                    |     Begin     +------------+ before
+                    |  Transmission |            v start
+                    |    Request    |    +---------------+
+                    +-------+-------+    |  Transmission |
+                            |            |    Failure    |
+                            v            |   Indication  |
+                    +---------------+    +---------------+
+                    |  Transmission |            ^
+                 +--+    Started    |            | error
+                 |  |   Indication  +------------+ after
+                 |  +-------+-------+            | start
+                 |          |                    |
+                 |          v                    |
+                 |  +---------------+            |
+                 |  |  Transmission |            |
+                 |  |    Progress   +------------+
+                 |  |   Indication  |            |
+                 |  +-------+-------+    +-------+-------+
+                 |          |            |   Interrupt   |
+                 |          v            |> Transmission |
+                 |  +---------------+    |    Request    |
+                 |  |  Transmission |    +---------------+
+                 +->|    Success    |
+                    |   Indication  |
+                    +---------------+
+
+              Figure 1: Activity flow for Bundle Transmission
+
+   The primitives associated with this service are in the following
+   subsections.
+
+3.1.1.  Begin Transmission
+
+   The BPA requests transfer of an individual encoded bundle with
+   parameters indicating to what CLA peer the transmission is destined.
+   Any queueing of transmissions is the obligation of the BPA, as soon
+   as the request is made to the CLA the transmission MAY begin.
+
+   Each transmission SHALL include an absolute time deadline based on at
+   least the bundle lifetime.  The BPA MAY expand or reduce the deadline
+   based on other factors including: the bundle size, the expected or
+   estimated network throughput and loss rate, the expected or estimated
+   one-way light time (OWLT) to and from the peer.
+
+   Parameters to this request include:
+
+   Bundle data:  The bundle encoded as an octet string to be
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 6]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+      transmitted.
+
+   Peer transport parameters:  Network and transport parameters
+      necessary to either identify an existing peer connection (if
+      applicable) or begin transport of the bundle.
+
+   Transfer deadline:  The amount of time, from the request, for which
+      is acceptable for the CLA to operate before either Success or
+      Failure.
+
+   Security Needs:  Along with the bundle data itself, the BPA provides
+      requirements about the transport security such as: the required
+      identity of the peer, requirement for authentication, if the
+      transport must be confidential or integrity-checked, _etc._
+
+      Many of the needs are optional rather than purely boolean in that
+      some aspects of security can be labeled as "don't care" to allow
+      opportunistic security [RFC7435].
+
+   The result of this request SHALL be a unique transmission ID used to
+   correlate later interactions with the request.
+
+   Following this request exactly one of the following SHALL be
+   indicated: Transmission Started, if the transmission is in fact
+   started, or Transmission Failure if the CLA cannot accommodate the
+   request for whatever reason.
+
+3.1.2.  Transmission Started
+
+   Even for unreliable transports, the CLA indicates to the BPA when the
+   transmission is actually started.  Because of contention for
+   resources (_e.g._, socket writes or rate-limiting tokens) the actual
+   start of transmission can be delayed from the request to begin
+   transmission.
+
+   Parameters to this indication include:
+
+   Transmission ID:  The correlator for the bundle transmission.
+
+3.1.3.  Transmission Progress
+
+   Not all CLAs will support the notion of a segmented transfer.  For
+   those that do, this indication provides information to the BPA about
+   how far along a transmission has progressed since the start.  If a
+   transmission is completed in a single unit, either the whole data
+   atomically or as a single segment, this indication SHALL NOT be
+   provided.  The size in this indication SHALL be relative to the
+   bundle data being transmitted and not include any segmentation or
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 7]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+   transport overhead.  When the CLA is reliable, this indication SHALL
+   include only peer acknowledged progress.
+
+   Parameters to this indication include:
+
+   Transmission ID:  The correlator for the bundle transmission.
+
+   Current size:  The accumulated data size sent so far.
+
+3.1.4.  Transmission Success
+
+   This indication concludes a transmission and informs the BPA that it
+   was a success.  An unreliable CL will always indicate success upon
+   completion.  When the CLA is reliable, this indication SHALL include
+   only peer acknowledged progress.
+
+   Parameters to this indication include:
+
+   Transmission ID:  The correlator for the bundle transmission.
+
+   Security Metadata:  Along with the bundle data itself, the CLA
+      provides metadata about the transport security such as: the
+      identity of the peer, whether or not it was authenticated, if the
+      transport is confidential or integrity-checked, _etc._
+
+3.1.5.  Transmission Failure
+
+   This indication concludes a transmission and informs the BPA that a
+   failure occurred.  The reason for the failure is CL-dependent and MAY
+   be absent if a CL has non-specific failures.
+
+   Parameters to this indication include:
+
+   Transmission ID:  The correlator for the bundle transmission.
+
+   Reason:  An optional reason for why the transmission failed.
+
+3.1.6.  Interrupt Transmission
+
+   This request provides a way for the BPA to cancel transmission any
+   time after it is started and before its deadline has expired.
+
+   Parameters to this request include:
+
+   Transmission ID:  The correlator for the bundle transmission.
+
+   Following this request the Transmission Failure MAY be indicated if
+   the interruption applied before the transmission finished.
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 8]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+3.2.  Bundle Reception
+
+   A necessary part of any CLA is the ability to receive from peer nodes
+   BPA in an asynchronous manner.  Because of this, all CLAs SHALL
+   support the Bundle Reception service.
+
+   Each reception is a time-bounded activity to transfer a bundle from a
+   peer CLA to the local CLA.  Receptions are always initiated by a peer
+   CLA, so the start of a reception is an indication.  Before a
+   reception can be started the local CLA needs to either be in an
+   established session (where applicable, see Section 3.3) or listening
+   for datagrams (where applicable, see Section 3.4).
+
+   Each reception is identified by a CLA-defined reception ID which is
+   unique within the context of a single BPA--CLA association.  The
+   bundle identity is not a sufficient reception ID because a CLA can
+   receive duplicated transmissions (across time or simultaneously) of
+   the same bundle and also the reception ID is needed before any bundle
+   primary block data is received.
+
+                    +---------------+
+                    |    Passive    |
+                    |   Listening   |    +---------------+
+                    +-------+-------+    |   Reception   |
+                            |            |    Failure    |
+                            v            |   Indication  |
+                    +---------------+    +---------------+
+                    |   Reception   |            ^
+                 +--+    Started    |            |
+                 |  |   Indication  +------------+
+                 |  +-------+-------+            |
+                 |          |                    |
+                 |          v                    |
+                 |  +---------------+            |
+                 |  |   Reception   |            |
+                 |  |    Progress   +------------+
+                 |  |   Indication  |            |
+                 |  +-------+-------+    +-------+-------+
+                 |          |            |   Interrupt   |
+                 |          v            |>  Reception   |
+                 |  +---------------+    |    Request    |
+                 |  |   Reception   |    +---------------+
+                 +->|    Success    |
+                    |   Indication  |
+                    +---------------+
+
+                Figure 2: Activity flow for Bundle Reception
+
+
+
+
+Sipos                     Expires 20 April 2023                 [Page 9]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+   The primitives associated with this service are in the following
+   subsections.
+
+3.2.1.  Reception Started
+
+   The CLA indicates to the BPA when a reception is started.
+
+   Parameters to this indication include:
+
+   Reception ID:  The correlator for the bundle reception.
+
+   Peer transport parameters:  Network and transport parameters
+      necessary to identify the peer sending the bundle.
+
+   Total size:  An optional expected size of the bundle data.
+
+3.2.2.  Reception Progress
+
+   Not all CLs will support the notion of a segmented transfer.  For
+   those that do, this indication provides information to the BPA about
+   how far along a reception has progressed since the start.  If a
+   reception is completed in a single unit, either the whole data
+   atomically or as a single segment, this indication SHALL NOT be
+   provided.  The size in this indication SHALL be relative to the
+   bundle data being transmitted and not include any segmentation or
+   transport overhead.  When the CL is reliable, this indication SHALL
+   include only peer acknowledged progress.
+
+   Parameters to this indication include:
+
+   Reception ID:  The correlator for the bundle reception.
+
+   Current size:  The accumulated data size received so far.  This size
+      does not necessarily need to be contiguous or at the head of the
+      bundle data.
+
+   Current data head:  An optional chunk of contiguous data at the head
+      of the total bundle data.  For CLs that can receive data out-of-
+      order this MAY be absent even when the current size is non-zero.
+
+3.2.3.  Reception Success
+
+   This indication concludes a reception and informs the BPA that it was
+   a success as well as providing the actual bundle data received.
+
+   Parameters to this indication include:
+
+   Reception ID:  The correlator for the bundle reception.
+
+
+
+Sipos                     Expires 20 April 2023                [Page 10]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+   Bundle data:  The received bundle encoded as an octet string.
+
+   Security Metadata:  Along with the bundle data itself, the CLA
+      provides metadata about the transport security such as: the
+      identity of the peer, whether or not it was authenticated, if the
+      transport is confidential or integrity-checked, _etc._
+
+3.2.4.  Reception Failure
+
+   This indication concludes a reception and informs the BPA that a
+   failure occurred.  The reason for the failure is CL-dependent and MAY
+   be absent if a CL has non-specific failures.
+
+   Parameters to this indication include:
+
+   Reception ID:  The correlator for the bundle reception.
+
+   Reason:  An optional reason for why the reception failed.
+
+3.2.5.  Interrupt Reception
+
+   This request provides a way for the BPA to refuse reception any time
+   after it is started.
+
+   If a CLA indicates current data head in its Reception Progress
+   indication, this can be used to inspect the bundle's primary block
+   before a large payload is received and preemptively refuse the bundle
+   to save time and network volume.
+
+   Parameters to this request include:
+
+   Reception ID:  The correlator for the bundle reception.
+
+   Following this request the Reception Failure MAY be indicated if the
+   interruption applied before the reception finished.
+
+3.3.  Persistent Session Keeping
+
+   An optional service provided by connection-oriented CLs, such as the
+   TCPCL of [RFC9174], is the ability to establish a session with a peer
+   node before any bundles need to be sent to that peer.  The
+   distinction between a connection and session is that the connection
+   is a service provided by the underlying transport while the session
+   is a service of the convergence layer itself.  Additionally, sessions
+   can include a security association between peers which can amortize
+   much of the processing time associated with authenticating and
+   authorizing a peer connection.
+
+
+
+
+Sipos                     Expires 20 April 2023                [Page 11]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+   Sessions MAY be initiated by the local CLA or as a response to
+   passive listening by the local CLA to peer initiations.  In either
+   case, the Session State Changed indication is produced by the CLA as
+   the sessions progress through to an established (or a failed or
+   terminated) state.
+
+   Whether or not a CLA requires a session to perform the actual
+   transfer of bundles does not affect the way in which the bundle-data-
+   focused services in Section 3.1 and Section 3.2 operate.  A CLA which
+   uses sessions SHOULD transparently create a sessions as needed to
+   perform a Bundle Transmission; the Transmission Started indication
+   would just be delayed until after the session is established and
+   ready for use.  In the case where a session can not be established in
+   a timely manner, the Transmission Failure indication would be used to
+   inform the BPA that the bundle was not able to be sent.
+
+   In order to fit this service model, CLAs SHALL include pseudo-states
+   which are associated with the session ending.  Doing so avoids the
+   need for a separate "session ended" indication.
+
+                   +---------------+
+                   |    Attempt    |   +---------------+
+                   |>   Session    |   |    Passive    |
+                   |    Request    |   |   Listening   |
+                   +-------+-------+   +-------+-------+
+                           |                   |
+                           +---------+---------+
+                                     |
+                                     v
+                             +---------------+
+                             | Session State |
+                             |    Changed    |<-+
+                             |   Indication  |  |
+                             +-------+-------+  |
+                                     |          |
+                                     +----------+
+                                                |
+                             +---------------+  |
+                             |   Terminate   |  |
+                             |>   Session    +--+
+                             |    Request    |
+                             +---------------+
+
+                Figure 3: Activity flow for session keeping
+
+   The primitives associated with this service are in the following
+   subsections.
+
+
+
+
+Sipos                     Expires 20 April 2023                [Page 12]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+3.3.1.  Attempt Session
+
+   This request allows the local BPA to initiate a session with a peer.
+   The attempt to create a session will not necessarily result in a
+   session eventually having an established state with the desired peer.
+   Configuration of the local or peer BPA can result in a session not
+   being able to become established.
+
+   Parameters to this request include:
+
+   Peer transport parameters:  Network and transport parameters
+      necessary to identify the connection.
+
+   The result of this request SHALL be a unique session ID used to
+   correlate later interactions with the session.  The peer transport
+   parameters are not a sufficient session identifier because a CLA can
+   request and/or establish multiple sessions with the same peer.
+
+3.3.2.  Terminate Session
+
+   This request allows the BPA to preemptively terminate a session with
+   a peer.  In the case where a CLA allows a clean termination procedure
+   that will avoid transmission or reception failures, it is better to
+   terminate than to simply stop the CLA.
+
+   Parameters to this request include:
+
+   Session ID:  The correlator for the session.
+
+3.3.3.  Session State Changed
+
+   The CLA indicates to the BPA when the state of a session changes in a
+   way that would be visible to the BPA.  The available states are
+   specific to the CLA but can include pre-established handshaking
+   states and pre-termination cleanup states.
+
+   Parameters to this indication include:
+
+   Session ID:  The correlator for the session.
+
+   Peer transport parameters:  Network and transport parameters
+      necessary to identify the connection.
+
+   New state:  The new state associated with the identified session.
+
+
+
+
+
+
+
+Sipos                     Expires 20 April 2023                [Page 13]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+3.3.4.  List Sessions
+
+   This optional request allows a BPA to poll the status of existing
+   connections to peer nodes.  This includes connections in which the
+   local node was the active entity (_i.e._, the client) and in which
+   the local node was the passive entity (_i.e._, the server).
+
+   The result of this request is list of session summaries, each
+   containing:
+
+   *  Session ID
+   *  Peer parameters
+   *  Session state
+
+3.4.  Passive Listening
+
+   In order to support the Bundle Reception service of Section 3.2 and/
+   or the Persistent Session service of Section 3.3, a BPA must
+   passively listen for network datagrams or connection attempts in
+   accordance with the CL specifics.  Because of this, all CLAs SHALL
+   support the Passive Listening service.
+
+      |  Just because this is mandatory to implement, does not mean that
+      |  any particular instances of the CLA need to use this service.
+      |  In the case of a connection-oriented CLA (_i.e._, implementing
+      |  the TCPCL) on one side of a firewall or NAT with restrictive
+      |  access policies in place, it would not be meaningful to listen
+      |  because the outside network cannot access that transport.  In
+      |  that case, the CLA can still transmit and receive bundles via
+      |  an actively initiated persistent connection.  For other,
+      |  connectionless CLA (_i.e._, implementing the LTPCL) it is
+      |  always necessary to passively listen in order to perform the
+      |  session/stream/transfer demultiplexing in the CLA.
+
+   The primitives associated with this service are in the following
+   subsections.
+
+3.4.1.  Begin Listening
+
+   This request informs the CLA when it is to begin passive listening on
+   a transport.  Because a single CLA would either not be able to listen
+   concurrently with the same parameters, or not logically gain anything
+   by doing so, there is no concept here of a listening identifier; the
+   transport parameters used to listen _are_ the identifier.
+
+   Parameters to this request include:
+
+   Transport parameters:  Network and transport parameters necessary to
+
+
+
+Sipos                     Expires 20 April 2023                [Page 14]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+      enable the BPA to listen for datagrams or connection requests.
+
+   The result of this request SHALL be an indication of whether or not
+   the request succeeded.  There are many reasons why a set of
+   parameters will not be able to listened for, including local network
+   address assignments or other processes on the same host using the
+   same transport parameters for listening.
+
+3.4.2.  End Listening
+
+   This request informs the CLA when it is to end passive listening on a
+   transport.  This request SHALL be coupled with an earlier Begin
+   Listening request, as there is no concept of ending listening before
+   beginning.
+
+   Parameters to this request include:
+
+   Transport parameters:  Network and transport parameters identical to
+      a Begin Listening request.
+
+4.  Security Considerations
+
+   This document does not define any requirements or structures which
+   introduce new security considerations.  All of the security
+   considerations of specific convergence layers following this service
+   model are all still applicable, including activities that are _not_
+   covered by this model.
+
+   The parameters available as "Security Needs" in Begin Transmission or
+   as "Security Metadata" in Reception Success are specific to the
+   combination of the security capabilities of a CL and the security
+   policy configured on a CLA.
+
+5.  IANA Considerations
+
+   This document does not affect any IANA registries.
+
+6.  References
+
+6.1.  Normative References
+
+   [RFC2119]  Bradner, S., "Key words for use in RFCs to Indicate
+              Requirement Levels", BCP 14, RFC 2119,
+              DOI 10.17487/RFC2119, March 1997,
+              <https://www.rfc-editor.org/info/rfc2119>.
+
+
+
+
+
+
+Sipos                     Expires 20 April 2023                [Page 15]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+   [RFC8174]  Leiba, B., "Ambiguity of Uppercase vs Lowercase in RFC
+              2119 Key Words", BCP 14, RFC 8174, DOI 10.17487/RFC8174,
+              May 2017, <https://www.rfc-editor.org/info/rfc8174>.
+
+6.2.  Informative References
+
+   [CCSDS-BP] Consultative Committee for Space Data Systems, "CCSDS
+              Bundle Protocol Specification", CCSDS 734.2-B-1, September
+              2015, <https://public.ccsds.org/Pubs/734x2b1.pdf>.
+
+   [RFC2675]  Borman, D., Deering, S., and R. Hinden, "IPv6 Jumbograms",
+              RFC 2675, DOI 10.17487/RFC2675, August 1999,
+              <https://www.rfc-editor.org/info/rfc2675>.
+
+   [RFC5326]  Ramadas, M., Burleigh, S., and S. Farrell, "Licklider
+              Transmission Protocol - Specification", RFC 5326,
+              DOI 10.17487/RFC5326, September 2008,
+              <https://www.rfc-editor.org/info/rfc5326>.
+
+   [RFC5740]  Adamson, B., Bormann, C., Handley, M., and J. Macker,
+              "NACK-Oriented Reliable Multicast (NORM) Transport
+              Protocol", RFC 5740, DOI 10.17487/RFC5740, November 2009,
+              <https://www.rfc-editor.org/info/rfc5740>.
+
+   [RFC7122]  Kruse, H., Jero, S., and S. Ostermann, "Datagram
+              Convergence Layers for the Delay- and Disruption-Tolerant
+              Networking (DTN) Bundle Protocol and Licklider
+              Transmission Protocol (LTP)", RFC 7122,
+              DOI 10.17487/RFC7122, March 2014,
+              <https://www.rfc-editor.org/info/rfc7122>.
+
+   [RFC7242]  Demmer, M., Ott, J., and S. Perreault, "Delay-Tolerant
+              Networking TCP Convergence-Layer Protocol", RFC 7242,
+              DOI 10.17487/RFC7242, June 2014,
+              <https://www.rfc-editor.org/info/rfc7242>.
+
+   [RFC7435]  Dukhovni, V., "Opportunistic Security: Some Protection
+              Most of the Time", RFC 7435, DOI 10.17487/RFC7435,
+              December 2014, <https://www.rfc-editor.org/info/rfc7435>.
+
+   [RFC8900]  Bonica, R., Baker, F., Huston, G., Hinden, R., Troan, O.,
+              and F. Gont, "IP Fragmentation Considered Fragile",
+              BCP 230, RFC 8900, DOI 10.17487/RFC8900, September 2020,
+              <https://www.rfc-editor.org/info/rfc8900>.
+
+   [RFC9171]  Burleigh, S., Fall, K., and E. Birrane, III, "Bundle
+              Protocol Version 7", RFC 9171, DOI 10.17487/RFC9171,
+              January 2022, <https://www.rfc-editor.org/info/rfc9171>.
+
+
+
+Sipos                     Expires 20 April 2023                [Page 16]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+   [RFC9174]  Sipos, B., Demmer, M., Ott, J., and S. Perreault, "Delay-
+              Tolerant Networking TCP Convergence-Layer Protocol Version
+              4", RFC 9174, DOI 10.17487/RFC9174, January 2022,
+              <https://www.rfc-editor.org/info/rfc9174>.
+
+   [I-D.ietf-dtn-bibect]
+              Burleigh, S., "Bundle-in-Bundle Encapsulation", Work in
+              Progress, Internet-Draft, draft-ietf-dtn-bibect-03, 18
+              February 2020, <https://www.ietf.org/archive/id/draft-
+              ietf-dtn-bibect-03.txt>.
+
+   [I-D.sipos-dtn-udpcl]
+              Sipos, B., "Delay-Tolerant Networking UDP Convergence
+              Layer Protocol", Work in Progress, Internet-Draft, draft-
+              sipos-dtn-udpcl-01, 26 March 2021,
+              <https://www.ietf.org/archive/id/draft-sipos-dtn-udpcl-
+              01.txt>.
+
+Appendix A.  Applicability to Existing Convergence Layers
+
+   This section explains how existing CLs relate to the idealized
+   service model defined in this document.  In some cases a CL can
+   simply omit optional and non-applicable parts of this model.  In
+   other cases the CL can deviate from this model in meaningful ways,
+   some by specification and some because of lack of specification of
+   such detail in the CL definition.
+
+A.1.  UDPCL
+
+   There are two different "current" definitions of the UDPCL: one in
+   Section 3.2.2 of [RFC7122] which is very vague on details of network
+   addressing and port numbers, and another in Appendix B4 of [CCSDS-BP]
+   which is more specific on some details but still ignores the effects
+   of network middleboxes.
+
+      |  The updates in [I-D.sipos-dtn-udpcl] are intended to address
+      |  these unspecified behaviors in a way which is compatible with
+      |  middlebox best practices.
+
+   The UDPCL does not have any notion of a partial transmission or
+   reception so no so will never indicate intermediate Transmission
+   Progress or Reception Progress and has no ability to Interrupt
+   Transmission or Interrupt Reception.  The UDPCL is unreliable so will
+   never indicate Transmission Failure.  The UDPCL will never indicate
+   Reception Started with a total size.
+
+   The peer transport parameters for the UDPCL are a network host name
+   or address and a UDP port number.
+
+
+
+Sipos                     Expires 20 April 2023                [Page 17]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+   The UDPCL does not have a concept of a persistent session, but
+   implementations are encouraged to re-use source port numbers when
+   transmitting to the same peer in order to be compatible with
+   firewalls and other middleboxes.
+
+A.2.  TCPCL
+
+   Because they both share the same overall logic and workflow, this
+   section applies to both the current TCPCL version 4 [RFC9174] and the
+   earlier version 3 [RFC7242].
+
+   Although the TCPCL provides a reliable transfer between transmitter
+   CLA and receiver CLA, there is no current requirement that mandates
+   the receiver sending a final XFER_ACK only after the BPA has fully
+   processed it (i.e. it will be either delivered, forwarded, or deleted
+   but not silently dropped).
+
+   The TCPCL does not include a Begin Transmission deadline or the
+   ability to interrupt a transmission.  There is an assumption in its
+   operation that a single transfer will complete in a short enough time
+   that it will be insignificant compared to a bundle's lifetime.  This
+   is applicable for small bundles with long lifetimes, but can cause
+   logical issues for large bundles and short lifetimes (relative to the
+   network throughput).
+
+   The TCPCL will only indicate Reception Started with a total size if
+   the sender of the bundle provided a size in an optional mechanism.
+   For TCPCLv3 this is a separate pre-transfer message and for TCPCLv4
+   this is a transfer extension item.
+
+   The peer transport parameters for the TCPCL are a network host name
+   or address and a TCP port number.  A CLA SHOULD NOT make correlation
+   assumptions between sessions to the same network host name or
+   address.  Only a session-reported Node ID MAY be used by a to
+   correlate between TCPCL sessions.
+
+   The TCPCL has a concept of a persistent session which agrees with the
+   service model of Section 3.3.  While the TCPCL definition is more
+   focused on the mechanics of session keeping and transfers as distinct
+   activities, this document treats session keeping as a subordinate
+   activity to transmissions (_i.e._, a CLA is free to transparently
+   reuse a session or establish a new session in support of a
+   transmission request with the same transport parameters).
+
+
+
+
+
+
+
+
+Sipos                     Expires 20 April 2023                [Page 18]
+
+Internet-Draft              BPv7 CLA Services               October 2022
+
+
+A.3.  LTPCL
+
+   Current LTP implementations do not universally have the concept of a
+   Begin Transmission deadline and the version zero specification in
+   [RFC5326] [RFC7122] do not mention reasons why a client would cancel
+   a transmitting session.  LTP has several types of internal segment-
+   to-segment timers for reliable transport, but outside of an explicit
+   transmission deadline a CLA provides no guarantee to the BPA about
+   the aggregate effect of timer durations, backoff durations, OWLT
+   assumptions or retry counts.
+
+   The peer transport parameters for the LTPCL-over-UDP are a network
+   host name or address and a UDP port number.  In some implementations,
+   the peering logic is based on LTP Engine ID rather than transport
+   parameters but ultimately there must be some mapping down to the
+   transport parameters.
+
+   Although LTP transfers are associated with an "LTP session" this is
+   not a persistent session as defined by Section 3.3; LTP has no
+   persistent sessions.
+
+A.4.  BIBE
+
+   The proposed bundle-in-bundle encapsulation (BIBE) service
+   [I-D.ietf-dtn-bibect] acts as an administrative record type above the
+   Administrative Entity [RFC9171] of a BPA as well as a CLA transport
+   below a BPA.
+
+   The proposed BIBE transport is atomic (any fragmentation of the
+   encapsulating bundle is not considered to be part of the BIBE layer),
+   so the BIBE will never indicate intermediate Transmission Progress or
+   Reception Progress.  Also because of that any Transmission Failure
+   will occur immediately after start (as the encapsulating bundle is
+   assembled) and any Reception Failure will occur immediately after
+   start (as the encapsulating bundle payload is decoded).
+
+Acknowledgments
+
+
+Author's Address
+
+   Brian Sipos
+   The Johns Hopkins University Applied Physics Laboratory
+   11100 Johns Hopkins Rd.
+   Laurel, MD 20723
+   United States of America
+   Email: brian.sipos+ietf@gmail.com
+
+
+
+
+Sipos                     Expires 20 April 2023                [Page 19]

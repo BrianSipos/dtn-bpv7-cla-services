@@ -1,0 +1,2284 @@
+<!DOCTYPE html>
+<html lang="en" class="Internet-Draft">
+<head>
+<meta charset="utf-8">
+<meta content="Common,Latin" name="scripts">
+<meta content="initial-scale=1.0" name="viewport">
+<title>Bundle Protocol Expected Convergence Layer Adapter Services</title>
+<meta content="Brian Sipos" name="author">
+<meta content="
+       
+This document attempts to harmonize the services expected of a Convergence Layer Adapter (CLA) by an overlaying Bundle Protocol Agent (BPA).
+This harmonization is based on combining the various existing CLA behaviors into a set of minimum expected service interfaces.
+       
+    " name="description">
+<meta content="xml2rfc 3.15.1" name="generator">
+<meta content="DTN" name="keyword">
+<meta content="draft-sipos-dtn-bpv7-cla-services-00" name="ietf.draft">
+<!-- Generator version information:
+  xml2rfc 3.15.1
+    Python 3.8.10
+    appdirs 1.4.4
+    ConfigArgParse 1.5.3
+    google-i18n-address 2.5.2
+    html5lib 1.1
+    intervaltree 3.1.0
+    Jinja2 3.1.2
+    kitchen 1.2.6
+    lxml 4.9.1
+    MarkupSafe 2.1.1
+    pycountry 22.3.5
+    PyYAML 5.3.1
+    requests 2.22.0
+    setuptools 45.2.0
+    six 1.14.0
+-->
+<link href="/home/runner/work/dtn-bpv7-cla-services/dtn-bpv7-cla-services/spec/draft-sipos-dtn-bpv7-cla-services.xml" rel="alternate" type="application/rfc+xml">
+<link href="#copyright" rel="license">
+<style type="text/css">/*
+
+  NOTE: Changes at the bottom of this file overrides some earlier settings.
+
+  Once the style has stabilized and has been adopted as an official RFC style,
+  this can be consolidated so that style settings occur only in one place, but
+  for now the contents of this file consists first of the initial CSS work as
+  provided to the RFC Formatter (xml2rfc) work, followed by itemized and
+  commented changes found necssary during the development of the v3
+  formatters.
+
+*/
+
+/* fonts */
+@import url('https://fonts.googleapis.com/css?family=Noto+Sans'); /* Sans-serif */
+@import url('https://fonts.googleapis.com/css?family=Noto+Serif'); /* Serif (print) */
+@import url('https://fonts.googleapis.com/css?family=Roboto+Mono'); /* Monospace */
+
+@viewport {
+  zoom: 1.0;
+  width: extend-to-zoom;
+}
+@-ms-viewport {
+  width: extend-to-zoom;
+  zoom: 1.0;
+}
+/* general and mobile first */
+html {
+}
+body {
+  max-width: 90%;
+  margin: 1.5em auto;
+  color: #222;
+  background-color: #fff;
+  font-size: 14px;
+  font-family: 'Noto Sans', Arial, Helvetica, sans-serif;
+  line-height: 1.6;
+  scroll-behavior: smooth;
+}
+.ears {
+  display: none;
+}
+
+/* headings */
+#title, h1, h2, h3, h4, h5, h6 {
+  margin: 1em 0 0.5em;
+  font-weight: bold;
+  line-height: 1.3;
+}
+#title {
+  clear: both;
+  border-bottom: 1px solid #ddd;
+  margin: 0 0 0.5em 0;
+  padding: 1em 0 0.5em;
+}
+.author {
+  padding-bottom: 4px;
+}
+h1 {
+  font-size: 26px;
+  margin: 1em 0;
+}
+h2 {
+  font-size: 22px;
+  margin-top: -20px;  /* provide offset for in-page anchors */
+  padding-top: 33px;
+}
+h3 {
+  font-size: 18px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h4 {
+  font-size: 16px;
+  margin-top: -36px;  /* provide offset for in-page anchors */
+  padding-top: 42px;
+}
+h5, h6 {
+  font-size: 14px;
+}
+#n-copyright-notice {
+  border-bottom: 1px solid #ddd;
+  padding-bottom: 1em;
+  margin-bottom: 1em;
+}
+/* general structure */
+p {
+  padding: 0;
+  margin: 0 0 1em 0;
+  text-align: left;
+}
+div, span {
+  position: relative;
+}
+div {
+  margin: 0;
+}
+.alignRight.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignRight.art-text pre {
+  padding: 0;
+}
+.alignRight {
+  margin: 1em 0;
+}
+.alignRight > *:first-child {
+  border: none;
+  margin: 0;
+  float: right;
+  clear: both;
+}
+.alignRight > *:nth-child(2) {
+  clear: both;
+  display: block;
+  border: none;
+}
+svg {
+  display: block;
+}
+.alignCenter.art-text {
+  background-color: #f9f9f9;
+  border: 1px solid #eee;
+  border-radius: 3px;
+  padding: 1em 1em 0;
+  margin-bottom: 1.5em;
+}
+.alignCenter.art-text pre {
+  padding: 0;
+}
+.alignCenter {
+  margin: 1em 0;
+}
+.alignCenter > *:first-child {
+  display: table;
+  border: none;
+  margin: 0 auto;
+}
+
+/* lists */
+ol, ul {
+  padding: 0;
+  margin: 0 0 1em 2em;
+}
+ol ol, ul ul, ol ul, ul ol {
+  margin-left: 1em;
+}
+li {
+  margin: 0 0 0.25em 0;
+}
+.ulCompact li {
+  margin: 0;
+}
+ul.empty, .ulEmpty {
+  list-style-type: none;
+}
+ul.empty li, .ulEmpty li {
+  margin-top: 0.5em;
+}
+ul.ulBare, li.ulBare {
+  margin-left: 0em !important;
+}
+ul.compact, .ulCompact,
+ol.compact, .olCompact {
+  line-height: 100%;
+  margin: 0 0 0 2em;
+}
+
+/* definition lists */
+dl {
+}
+dl > dt {
+  float: left;
+  margin-right: 1em;
+}
+/* 
+dl.nohang > dt {
+  float: none;
+}
+*/
+dl > dd {
+  margin-bottom: .8em;
+  min-height: 1.3em;
+}
+dl.compact > dd, .dlCompact > dd {
+  margin-bottom: 0em;
+}
+dl > dd > dl {
+  margin-top: 0.5em;
+  margin-bottom: 0em;
+}
+
+/* links */
+a {
+  text-decoration: none;
+}
+a[href] {
+  color: #22e; /* Arlen: WCAG 2019 */
+}
+a[href]:hover {
+  background-color: #f2f2f2;
+}
+figcaption a[href],
+a[href].selfRef {
+  color: #222;
+}
+/* XXX probably not this:
+a.selfRef:hover {
+  background-color: transparent;
+  cursor: default;
+} */
+
+/* Figures */
+tt, code, pre {
+  background-color: #f9f9f9;
+  font-family: 'Roboto Mono', monospace;
+}
+pre {
+  border: 1px solid #eee;
+  margin: 0;
+  padding: 1em;
+}
+img {
+  max-width: 100%;
+}
+figure {
+  margin: 0;
+}
+figure blockquote {
+  margin: 0.8em 0.4em 0.4em;
+}
+figcaption {
+  font-style: italic;
+  margin: 0 0 1em 0;
+}
+@media screen {
+  pre {
+    overflow-x: auto;
+    max-width: 100%;
+    max-width: calc(100% - 22px);
+  }
+}
+
+/* aside, blockquote */
+aside, blockquote {
+  margin-left: 0;
+  padding: 1.2em 2em;
+}
+blockquote {
+  background-color: #f9f9f9;
+  color: #111; /* Arlen: WCAG 2019 */
+  border: 1px solid #ddd;
+  border-radius: 3px;
+  margin: 1em 0;
+}
+cite {
+  display: block;
+  text-align: right;
+  font-style: italic;
+}
+
+/* tables */
+table {
+  width: 100%;
+  margin: 0 0 1em;
+  border-collapse: collapse;
+  border: 1px solid #eee;
+}
+th, td {
+  text-align: left;
+  vertical-align: top;
+  padding: 0.5em 0.75em;
+}
+th {
+  text-align: left;
+  background-color: #e9e9e9;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f5f5f5;
+}
+table caption {
+  font-style: italic;
+  margin: 0;
+  padding: 0;
+  text-align: left;
+}
+table p {
+  /* XXX to avoid bottom margin on table row signifiers. If paragraphs should
+     be allowed within tables more generally, it would be far better to select on a class. */
+  margin: 0;
+}
+
+/* pilcrow */
+a.pilcrow {
+  color: #666; /* Arlen: AHDJ 2019 */
+  text-decoration: none;
+  visibility: hidden;
+  user-select: none;
+  -ms-user-select: none;
+  -o-user-select:none;
+  -moz-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -webkit-touch-callout: none;
+}
+@media screen {
+  aside:hover > a.pilcrow,
+  p:hover > a.pilcrow,
+  blockquote:hover > a.pilcrow,
+  div:hover > a.pilcrow,
+  li:hover > a.pilcrow,
+  pre:hover > a.pilcrow {
+    visibility: visible;
+  }
+  a.pilcrow:hover {
+    background-color: transparent;
+  }
+}
+
+/* misc */
+hr {
+  border: 0;
+  border-top: 1px solid #eee;
+}
+.bcp14 {
+  font-variant: small-caps;
+}
+
+.role {
+  font-variant: all-small-caps;
+}
+
+/* info block */
+#identifiers {
+  margin: 0;
+  font-size: 0.9em;
+}
+#identifiers dt {
+  width: 3em;
+  clear: left;
+}
+#identifiers dd {
+  float: left;
+  margin-bottom: 0;
+}
+/* Fix PDF info block run off issue */
+@media print {
+  #identifiers dd {
+    float: none;
+  }
+}
+#identifiers .authors .author {
+  display: inline-block;
+  margin-right: 1.5em;
+}
+#identifiers .authors .org {
+  font-style: italic;
+}
+
+/* The prepared/rendered info at the very bottom of the page */
+.docInfo {
+  color: #666; /* Arlen: WCAG 2019 */
+  font-size: 0.9em;
+  font-style: italic;
+  margin-top: 2em;
+}
+.docInfo .prepared {
+  float: left;
+}
+.docInfo .prepared {
+  float: right;
+}
+
+/* table of contents */
+#toc  {
+  padding: 0.75em 0 2em 0;
+  margin-bottom: 1em;
+}
+nav.toc ul {
+  margin: 0 0.5em 0 0;
+  padding: 0;
+  list-style: none;
+}
+nav.toc li {
+  line-height: 1.3em;
+  margin: 0.75em 0;
+  padding-left: 1.2em;
+  text-indent: -1.2em;
+}
+/* references */
+.references dt {
+  text-align: right;
+  font-weight: bold;
+  min-width: 7em;
+}
+.references dd {
+  margin-left: 8em;
+  overflow: auto;
+}
+
+.refInstance {
+  margin-bottom: 1.25em;
+}
+
+.references .ascii {
+  margin-bottom: 0.25em;
+}
+
+/* index */
+.index ul {
+  margin: 0 0 0 1em;
+  padding: 0;
+  list-style: none;
+}
+.index ul ul {
+  margin: 0;
+}
+.index li {
+  margin: 0;
+  text-indent: -2em;
+  padding-left: 2em;
+  padding-bottom: 5px;
+}
+.indexIndex {
+  margin: 0.5em 0 1em;
+}
+.index a {
+  font-weight: 700;
+}
+/* make the index two-column on all but the smallest screens */
+@media (min-width: 600px) {
+  .index ul {
+    -moz-column-count: 2;
+    -moz-column-gap: 20px;
+  }
+  .index ul ul {
+    -moz-column-count: 1;
+    -moz-column-gap: 0;
+  }
+}
+
+/* authors */
+address.vcard {
+  font-style: normal;
+  margin: 1em 0;
+}
+
+address.vcard .nameRole {
+  font-weight: 700;
+  margin-left: 0;
+}
+address.vcard .label {
+  font-family: "Noto Sans",Arial,Helvetica,sans-serif;
+  margin: 0.5em 0;
+}
+address.vcard .type {
+  display: none;
+}
+.alternative-contact {
+  margin: 1.5em 0 1em;
+}
+hr.addr {
+  border-top: 1px dashed;
+  margin: 0;
+  color: #ddd;
+  max-width: calc(100% - 16px);
+}
+
+/* temporary notes */
+.rfcEditorRemove::before {
+  position: absolute;
+  top: 0.2em;
+  right: 0.2em;
+  padding: 0.2em;
+  content: "The RFC Editor will remove this note";
+  color: #9e2a00; /* Arlen: WCAG 2019 */
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+}
+.rfcEditorRemove {
+  position: relative;
+  padding-top: 1.8em;
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  border-radius: 3px;
+}
+.cref {
+  background-color: #ffd; /* Arlen: WCAG 2019 */
+  padding: 2px 4px;
+}
+.crefSource {
+  font-style: italic;
+}
+/* alternative layout for smaller screens */
+@media screen and (max-width: 1023px) {
+  body {
+    padding-top: 2em;
+  }
+  #title {
+    padding: 1em 0;
+  }
+  h1 {
+    font-size: 24px;
+  }
+  h2 {
+    font-size: 20px;
+    margin-top: -18px;  /* provide offset for in-page anchors */
+    padding-top: 38px;
+  }
+  #identifiers dd {
+    max-width: 60%;
+  }
+  #toc {
+    position: fixed;
+    z-index: 2;
+    top: 0;
+    right: 0;
+    padding: 0;
+    margin: 0;
+    background-color: inherit;
+    border-bottom: 1px solid #ccc;
+  }
+  #toc h2 {
+    margin: -1px 0 0 0;
+    padding: 4px 0 4px 6px;
+    padding-right: 1em;
+    min-width: 190px;
+    font-size: 1.1em;
+    text-align: right;
+    background-color: #444;
+    color: white;
+    cursor: pointer;
+  }
+  #toc h2::before { /* css hamburger */
+    float: right;
+    position: relative;
+    width: 1em;
+    height: 1px;
+    left: -164px;
+    margin: 6px 0 0 0;
+    background: white none repeat scroll 0 0;
+    box-shadow: 0 4px 0 0 white, 0 8px 0 0 white;
+    content: "";
+  }
+  #toc nav {
+    display: none;
+    padding: 0.5em 1em 1em;
+    overflow: auto;
+    height: calc(100vh - 48px);
+    border-left: 1px solid #ddd;
+  }
+}
+
+/* alternative layout for wide screens */
+@media screen and (min-width: 1024px) {
+  body {
+    max-width: 724px;
+    margin: 42px auto;
+    padding-left: 1.5em;
+    padding-right: 29em;
+  }
+  #toc {
+    position: fixed;
+    top: 42px;
+    right: 42px;
+    width: 25%;
+    margin: 0;
+    padding: 0 1em;
+    z-index: 1;
+  }
+  #toc h2 {
+    border-top: none;
+    border-bottom: 1px solid #ddd;
+    font-size: 1em;
+    font-weight: normal;
+    margin: 0;
+    padding: 0.25em 1em 1em 0;
+  }
+  #toc nav {
+    display: block;
+    height: calc(90vh - 84px);
+    bottom: 0;
+    padding: 0.5em 0 0;
+    overflow: auto;
+  }
+  img { /* future proofing */
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* pagination */
+@media print {
+  body {
+
+    width: 100%;
+  }
+  p {
+    orphans: 3;
+    widows: 3;
+  }
+  #n-copyright-notice {
+    border-bottom: none;
+  }
+  #toc, #n-introduction {
+    page-break-before: always;
+  }
+  #toc {
+    border-top: none;
+    padding-top: 0;
+  }
+  figure, pre {
+    page-break-inside: avoid;
+  }
+  figure {
+    overflow: scroll;
+  }
+  pre.breakable {
+    break-inside: auto;
+  }
+  h1, h2, h3, h4, h5, h6 {
+    page-break-after: avoid;
+  }
+  h2+*, h3+*, h4+*, h5+*, h6+* {
+    page-break-before: avoid;
+  }
+  pre {
+    white-space: pre-wrap;
+    word-wrap: break-word;
+    font-size: 10pt;
+  }
+  table {
+    border: 1px solid #ddd;
+  }
+  td {
+    border-top: 1px solid #ddd;
+  }
+}
+
+/* This is commented out here, as the string-set: doesn't
+   pass W3C validation currently */
+/*
+.ears thead .left {
+  string-set: ears-top-left content();
+}
+
+.ears thead .center {
+  string-set: ears-top-center content();
+}
+
+.ears thead .right {
+  string-set: ears-top-right content();
+}
+
+.ears tfoot .left {
+  string-set: ears-bottom-left content();
+}
+
+.ears tfoot .center {
+  string-set: ears-bottom-center content();
+}
+
+.ears tfoot .right {
+  string-set: ears-bottom-right content();
+}
+*/
+
+@page :first {
+  padding-top: 0;
+  @top-left {
+    content: normal;
+    border: none;
+  }
+  @top-center {
+    content: normal;
+    border: none;
+  }
+  @top-right {
+    content: normal;
+    border: none;
+  }
+}
+
+@page {
+  size: A4;
+  margin-bottom: 45mm;
+  padding-top: 20px;
+  /* The follwing is commented out here, but set appropriately by in code, as
+     the content depends on the document */
+  /*
+  @top-left {
+    content: 'Internet-Draft';
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-left {
+    content: string(ears-top-left);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-center {
+    content: string(ears-top-center);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @top-right {
+    content: string(ears-top-right);
+    vertical-align: bottom;
+    border-bottom: solid 1px #ccc;
+  }
+  @bottom-left {
+    content: string(ears-bottom-left);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-center {
+    content: string(ears-bottom-center);
+    vertical-align: top;
+    border-top: solid 1px #ccc;
+  }
+  @bottom-right {
+      content: '[Page ' counter(page) ']';
+      vertical-align: top;
+      border-top: solid 1px #ccc;
+  }
+  */
+
+}
+
+/* Changes introduced to fix issues found during implementation */
+/* Make sure links are clickable even if overlapped by following H* */
+a {
+  z-index: 2;
+}
+/* Separate body from document info even without intervening H1 */
+section {
+  clear: both;
+}
+
+
+/* Top align author divs, to avoid names without organization dropping level with org names */
+.author {
+  vertical-align: top;
+}
+
+/* Leave room in document info to show Internet-Draft on one line */
+#identifiers dt {
+  width: 8em;
+}
+
+/* Don't waste quite as much whitespace between label and value in doc info */
+#identifiers dd {
+  margin-left: 1em;
+}
+
+/* Give floating toc a background color (needed when it's a div inside section */
+#toc {
+  background-color: white;
+}
+
+/* Make the collapsed ToC header render white on gray also when it's a link */
+@media screen and (max-width: 1023px) {
+  #toc h2 a,
+  #toc h2 a:link,
+  #toc h2 a:focus,
+  #toc h2 a:hover,
+  #toc a.toplink,
+  #toc a.toplink:hover {
+    color: white;
+    background-color: #444;
+    text-decoration: none;
+  }
+}
+
+/* Give the bottom of the ToC some whitespace */
+@media screen and (min-width: 1024px) {
+  #toc {
+    padding: 0 0 1em 1em;
+  }
+}
+
+/* Style section numbers with more space between number and title */
+.section-number {
+  padding-right: 0.5em;
+}
+
+/* prevent monospace from becoming overly large */
+tt, code, pre {
+  font-size: 95%;
+}
+
+/* Fix the height/width aspect for ascii art*/
+pre.sourcecode,
+.art-text pre {
+  line-height: 1.12;
+}
+
+
+/* Add styling for a link in the ToC that points to the top of the document */
+a.toplink {
+  float: right;
+  margin-right: 0.5em;
+}
+
+/* Fix the dl styling to match the RFC 7992 attributes */
+dl > dt,
+dl.dlParallel > dt {
+  float: left;
+  margin-right: 1em;
+}
+dl.dlNewline > dt {
+  float: none;
+}
+
+/* Provide styling for table cell text alignment */
+table td.text-left,
+table th.text-left {
+  text-align: left;
+}
+table td.text-center,
+table th.text-center {
+  text-align: center;
+}
+table td.text-right,
+table th.text-right {
+  text-align: right;
+}
+
+/* Make the alternative author contact informatio look less like just another
+   author, and group it closer with the primary author contact information */
+.alternative-contact {
+  margin: 0.5em 0 0.25em 0;
+}
+address .non-ascii {
+  margin: 0 0 0 2em;
+}
+
+/* With it being possible to set tables with alignment
+  left, center, and right, { width: 100%; } does not make sense */
+table {
+  width: auto;
+}
+
+/* Avoid reference text that sits in a block with very wide left margin,
+   because of a long floating dt label.*/
+.references dd {
+  overflow: visible;
+}
+
+/* Control caption placement */
+caption {
+  caption-side: bottom;
+}
+
+/* Limit the width of the author address vcard, so names in right-to-left
+   script don't end up on the other side of the page. */
+
+address.vcard {
+  max-width: 30em;
+  margin-right: auto;
+}
+
+/* For address alignment dependent on LTR or RTL scripts */
+address div.left {
+  text-align: left;
+}
+address div.right {
+  text-align: right;
+}
+
+/* Provide table alignment support.  We can't use the alignX classes above
+   since they do unwanted things with caption and other styling. */
+table.right {
+ margin-left: auto;
+ margin-right: 0;
+}
+table.center {
+ margin-left: auto;
+ margin-right: auto;
+}
+table.left {
+ margin-left: 0;
+ margin-right: auto;
+}
+
+/* Give the table caption label the same styling as the figcaption */
+caption a[href] {
+  color: #222;
+}
+
+@media print {
+  .toplink {
+    display: none;
+  }
+
+  /* avoid overwriting the top border line with the ToC header */
+  #toc {
+    padding-top: 1px;
+  }
+
+  /* Avoid page breaks inside dl and author address entries */
+  .vcard {
+    page-break-inside: avoid;
+  }
+
+}
+/* Tweak the bcp14 keyword presentation */
+.bcp14 {
+  font-variant: small-caps;
+  font-weight: bold;
+  font-size: 0.9em;
+}
+/* Tweak the invisible space above H* in order not to overlay links in text above */
+ h2 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 31px;
+ }
+ h3 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+ h4 {
+  margin-top: -18px;  /* provide offset for in-page anchors */
+  padding-top: 24px;
+ }
+/* Float artwork pilcrow to the right */
+@media screen {
+  .artwork a.pilcrow {
+    display: block;
+    line-height: 0.7;
+    margin-top: 0.15em;
+  }
+}
+/* Make pilcrows on dd visible */
+@media screen {
+  dd:hover > a.pilcrow {
+    visibility: visible;
+  }
+}
+/* Make the placement of figcaption match that of a table's caption
+   by removing the figure's added bottom margin */
+.alignLeft.art-text,
+.alignCenter.art-text,
+.alignRight.art-text {
+   margin-bottom: 0;
+}
+.alignLeft,
+.alignCenter,
+.alignRight {
+  margin: 1em 0 0 0;
+}
+/* In print, the pilcrow won't show on hover, so prevent it from taking up space,
+   possibly even requiring a new line */
+@media print {
+  a.pilcrow {
+    display: none;
+  }
+}
+/* Styling for the external metadata */
+div#external-metadata {
+  background-color: #eee;
+  padding: 0.5em;
+  margin-bottom: 0.5em;
+  display: none;
+}
+div#internal-metadata {
+  padding: 0.5em;                       /* to match the external-metadata padding */
+}
+/* Styling for title RFC Number */
+h1#rfcnum {
+  clear: both;
+  margin: 0 0 -1em;
+  padding: 1em 0 0 0;
+}
+/* Make .olPercent look the same as <ol><li> */
+dl.olPercent > dd {
+  margin-bottom: 0.25em;
+  min-height: initial;
+}
+/* Give aside some styling to set it apart */
+aside {
+  border-left: 1px solid #ddd;
+  margin: 1em 0 1em 2em;
+  padding: 0.2em 2em;
+}
+aside > dl,
+aside > ol,
+aside > ul,
+aside > table,
+aside > p {
+  margin-bottom: 0.5em;
+}
+/* Additional page break settings */
+@media print {
+  figcaption, table caption {
+    page-break-before: avoid;
+  }
+}
+/* Font size adjustments for print */
+@media print {
+  body  { font-size: 10pt;      line-height: normal; max-width: 96%; }
+  h1    { font-size: 1.72em;    padding-top: 1.5em; } /* 1*1.2*1.2*1.2 */
+  h2    { font-size: 1.44em;    padding-top: 1.5em; } /* 1*1.2*1.2 */
+  h3    { font-size: 1.2em;     padding-top: 1.5em; } /* 1*1.2 */
+  h4    { font-size: 1em;       padding-top: 1.5em; }
+  h5, h6 { font-size: 1em;      margin: initial; padding: 0.5em 0 0.3em; }
+}
+/* Sourcecode margin in print, when there's no pilcrow */
+@media print {
+  .artwork,
+  .artwork > pre,
+  .sourcecode {
+    margin-bottom: 1em;
+  }
+}
+/* Avoid narrow tables forcing too narrow table captions, which may render badly */
+table {
+  min-width: 20em;
+}
+/* ol type a */
+ol.type-a { list-style-type: lower-alpha; }
+ol.type-A { list-style-type: upper-alpha; }
+ol.type-i { list-style-type: lower-roman; }
+ol.type-I { list-style-type: lower-roman; }
+/* Apply the print table and row borders in general, on request from the RPC,
+and increase the contrast between border and odd row background sligthtly */
+table {
+  border: 1px solid #ddd;
+}
+td {
+  border-top: 1px solid #ddd;
+}
+tr {
+  break-inside: avoid;
+}
+tr:nth-child(2n+1) > td {
+  background-color: #f8f8f8;
+}
+/* Use style rules to govern display of the TOC. */
+@media screen and (max-width: 1023px) {
+  #toc nav { display: none; }
+  #toc.active nav { display: block; }
+}
+/* Add support for keepWithNext */
+.keepWithNext {
+  break-after: avoid-page;
+  break-after: avoid-page;
+}
+/* Add support for keepWithPrevious */
+.keepWithPrevious {
+  break-before: avoid-page;
+}
+/* Change the approach to avoiding breaks inside artwork etc. */
+figure, pre, table, .artwork, .sourcecode  {
+  break-before: auto;
+  break-after: auto;
+}
+/* Avoid breaks between <dt> and <dd> */
+dl {
+  break-before: auto;
+  break-inside: auto;
+}
+dt {
+  break-before: auto;
+  break-after: avoid-page;
+}
+dd {
+  break-before: avoid-page;
+  break-after: auto;
+  orphans: 3;
+  widows: 3
+}
+span.break, dd.break {
+  margin-bottom: 0;
+  min-height: 0;
+  break-before: auto;
+  break-inside: auto;
+  break-after: auto;
+}
+/* Undo break-before ToC */
+@media print {
+  #toc {
+    break-before: auto;
+  }
+}
+/* Text in compact lists should not get extra bottim margin space,
+   since that would makes the list not compact */
+ul.compact p, .ulCompact p,
+ol.compact p, .olCompact p {
+ margin: 0;
+}
+/* But the list as a whole needs the extra space at the end */
+section ul.compact,
+section .ulCompact,
+section ol.compact,
+section .olCompact {
+  margin-bottom: 1em;                    /* same as p not within ul.compact etc. */
+}
+/* The tt and code background above interferes with for instance table cell
+   backgrounds.  Changed to something a bit more selective. */
+tt, code {
+  background-color: transparent;
+}
+p tt, p code, li tt, li code {
+  background-color: #f8f8f8;
+}
+/* Tweak the pre margin -- 0px doesn't come out well */
+pre {
+   margin-top: 0.5px;
+}
+/* Tweak the comact list text */
+ul.compact, .ulCompact,
+ol.compact, .olCompact,
+dl.compact, .dlCompact {
+  line-height: normal;
+}
+/* Don't add top margin for nested lists */
+li > ul, li > ol, li > dl,
+dd > ul, dd > ol, dd > dl,
+dl > dd > dl {
+  margin-top: initial;
+}
+/* Elements that should not be rendered on the same line as a <dt> */
+/* This should match the element list in writer.text.TextWriter.render_dl() */
+dd > div.artwork:first-child,
+dd > aside:first-child,
+dd > figure:first-child,
+dd > ol:first-child,
+dd > div:first-child > pre.sourcecode,
+dd > table:first-child,
+dd > ul:first-child {
+  clear: left;
+}
+/* fix for weird browser behaviour when <dd/> is empty */
+dt+dd:empty::before{
+  content: "\00a0";
+}
+/* Make paragraph spacing inside <li> smaller than in body text, to fit better within the list */
+li > p {
+  margin-bottom: 0.5em
+}
+/* Don't let p margin spill out from inside list items */
+li > p:last-of-type {
+  margin-bottom: 0;
+}
+</style>
+<link href="rfc-local.css" rel="stylesheet" type="text/css">
+<script type="application/javascript">async function addMetadata(){try{const e=document.styleSheets[0].cssRules;for(let t=0;t<e.length;t++)if(/#identifiers/.exec(e[t].selectorText)){const a=e[t].cssText.replace("#identifiers","#external-updates");document.styleSheets[0].insertRule(a,document.styleSheets[0].cssRules.length)}}catch(e){console.log(e)}const e=document.getElementById("external-metadata");if(e)try{var t,a="",o=function(e){const t=document.getElementsByTagName("meta");for(let a=0;a<t.length;a++)if(t[a].getAttribute("name")===e)return t[a].getAttribute("content");return""}("rfc.number");if(o){t="https://www.rfc-editor.org/rfc/rfc"+o+".json";try{const e=await fetch(t);a=await e.json()}catch(e){t=document.URL.indexOf("html")>=0?document.URL.replace(/html$/,"json"):document.URL+".json";const o=await fetch(t);a=await o.json()}}if(!a)return;e.style.display="block";const s="",d="https://datatracker.ietf.org/doc",n="https://datatracker.ietf.org/ipr/search",c="https://www.rfc-editor.org/info",l=a.doc_id.toLowerCase(),i=a.doc_id.slice(0,3).toLowerCase(),f=a.doc_id.slice(3).replace(/^0+/,""),u={status:"Status",obsoletes:"Obsoletes",obsoleted_by:"Obsoleted By",updates:"Updates",updated_by:"Updated By",see_also:"See Also",errata_url:"Errata"};let h="<dl style='overflow:hidden' id='external-updates'>";["status","obsoletes","obsoleted_by","updates","updated_by","see_also","errata_url"].forEach(e=>{if("status"==e){a[e]=a[e].toLowerCase();var t=a[e].split(" "),o=t.length,w="",p=1;for(let e=0;e<o;e++)p<o?w=w+r(t[e])+" ":w+=r(t[e]),p++;a[e]=w}else if("obsoletes"==e||"obsoleted_by"==e||"updates"==e||"updated_by"==e){var g,m="",b=1;g=a[e].length;for(let t=0;t<g;t++)a[e][t]&&(a[e][t]=String(a[e][t]).toLowerCase(),m=b<g?m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>, ":m+"<a href='"+s+"/rfc/".concat(a[e][t])+"'>"+a[e][t].slice(3)+"</a>",b++);a[e]=m}else if("see_also"==e){var y,L="",C=1;y=a[e].length;for(let t=0;t<y;t++)if(a[e][t]){a[e][t]=String(a[e][t]);var _=a[e][t].slice(0,3),v=a[e][t].slice(3).replace(/^0+/,"");L=C<y?"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>, ":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>, ":"RFC"!=_?L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+_+" "+v+"</a>":L+"<a href='"+s+"/info/"+_.toLowerCase().concat(v.toLowerCase())+"'>"+v+"</a>",C++}a[e]=L}else if("errata_url"==e){var R="";R=a[e]?R+"<a href='"+a[e]+"'>Errata exist</a> | <a href='"+d+"/"+l+"'>Datatracker</a>| <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>":"<a href='"+d+"/"+l+"'>Datatracker</a> | <a href='"+n+"/?"+i+"="+f+"&submit="+i+"'>IPR</a> | <a href='"+c+"/"+l+"'>Info page</a>",a[e]=R}""!=a[e]?"Errata"==u[e]?h+=`<dt>More info:</dt><dd>${a[e]}</dd>`:h+=`<dt>${u[e]}:</dt><dd>${a[e]}</dd>`:"Errata"==u[e]&&(h+=`<dt>More info:</dt><dd>${a[e]}</dd>`)}),h+="</dl>",e.innerHTML=h}catch(e){console.log(e)}else console.log("Could not locate metadata <div> element");function r(e){return e.charAt(0).toUpperCase()+e.slice(1)}}window.removeEventListener("load",addMetadata),window.addEventListener("load",addMetadata);</script>
+</head>
+<body class="xml2rfc">
+<script src="metadata.min.js"></script>
+<table class="ears">
+<thead><tr>
+<td class="left">Internet-Draft</td>
+<td class="center">BPv7 CLA Services</td>
+<td class="right">October 2022</td>
+</tr></thead>
+<tfoot><tr>
+<td class="left">Sipos</td>
+<td class="center">Expires 20 April 2023</td>
+<td class="right">[Page]</td>
+</tr></tfoot>
+</table>
+<div id="external-metadata" class="document-information"></div>
+<div id="internal-metadata" class="document-information">
+<dl id="identifiers">
+<dt class="label-workgroup">Workgroup:</dt>
+<dd class="workgroup">Delay-Tolerant Networking</dd>
+<dt class="label-internet-draft">Internet-Draft:</dt>
+<dd class="internet-draft">draft-sipos-dtn-bpv7-cla-services-00</dd>
+<dt class="label-published">Published:</dt>
+<dd class="published">
+<time datetime="2022-10-17" class="published">17 October 2022</time>
+    </dd>
+<dt class="label-intended-status">Intended Status:</dt>
+<dd class="intended-status">Informational</dd>
+<dt class="label-expires">Expires:</dt>
+<dd class="expires"><time datetime="2023-04-20">20 April 2023</time></dd>
+<dt class="label-authors">Author:</dt>
+<dd class="authors">
+<div class="author">
+      <div class="author-name">B. Sipos</div>
+<div class="org">JHU/APL</div>
+</div>
+</dd>
+</dl>
+</div>
+<h1 id="title">Bundle Protocol Expected Convergence Layer Adapter Services</h1>
+<section id="section-abstract">
+      <h2 id="abstract"><a href="#abstract" class="selfRef">Abstract</a></h2>
+<p id="section-abstract-1">
+This document attempts to harmonize the services expected of a Convergence Layer Adapter (CLA) by an overlaying Bundle Protocol Agent (BPA).
+This harmonization is based on combining the various existing CLA behaviors into a set of minimum expected service interfaces.<a href="#section-abstract-1" class="pilcrow">¶</a></p>
+</section>
+<div id="status-of-memo">
+<section id="section-boilerplate.1">
+        <h2 id="name-status-of-this-memo">
+<a href="#name-status-of-this-memo" class="section-name selfRef">Status of This Memo</a>
+        </h2>
+<p id="section-boilerplate.1-1">
+        This Internet-Draft is submitted in full conformance with the
+        provisions of BCP 78 and BCP 79.<a href="#section-boilerplate.1-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-2">
+        Internet-Drafts are working documents of the Internet Engineering Task
+        Force (IETF). Note that other groups may also distribute working
+        documents as Internet-Drafts. The list of current Internet-Drafts is
+        at <span><a href="https://datatracker.ietf.org/drafts/current/">https://datatracker.ietf.org/drafts/current/</a></span>.<a href="#section-boilerplate.1-2" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-3">
+        Internet-Drafts are draft documents valid for a maximum of six months
+        and may be updated, replaced, or obsoleted by other documents at any
+        time. It is inappropriate to use Internet-Drafts as reference
+        material or to cite them other than as "work in progress."<a href="#section-boilerplate.1-3" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.1-4">
+        This Internet-Draft will expire on 20 April 2023.<a href="#section-boilerplate.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="copyright">
+<section id="section-boilerplate.2">
+        <h2 id="name-copyright-notice">
+<a href="#name-copyright-notice" class="section-name selfRef">Copyright Notice</a>
+        </h2>
+<p id="section-boilerplate.2-1">
+            Copyright (c) 2022 IETF Trust and the persons identified as the
+            document authors. All rights reserved.<a href="#section-boilerplate.2-1" class="pilcrow">¶</a></p>
+<p id="section-boilerplate.2-2">
+            This document is subject to BCP 78 and the IETF Trust's Legal
+            Provisions Relating to IETF Documents
+            (<span><a href="https://trustee.ietf.org/license-info">https://trustee.ietf.org/license-info</a></span>) in effect on the date of
+            publication of this document. Please review these documents
+            carefully, as they describe your rights and restrictions with
+            respect to this document. Code Components extracted from this
+            document must include Revised BSD License text as described in
+            Section 4.e of the Trust Legal Provisions and are provided without
+            warranty as described in the Revised BSD License.<a href="#section-boilerplate.2-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="toc">
+<section id="section-toc.1">
+        <a href="#" onclick="scroll(0,0)" class="toplink">▲</a><h2 id="name-table-of-contents">
+<a href="#name-table-of-contents" class="section-name selfRef">Table of Contents</a>
+        </h2>
+<nav class="toc"><ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1">
+            <p id="section-toc.1-1.1.1" class="keepWithNext"><a href="#section-1" class="auto internal xref">1</a>.  <a href="#name-introduction" class="internal xref">Introduction</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.1">
+                <p id="section-toc.1-1.1.2.1.1" class="keepWithNext"><a href="#section-1.1" class="auto internal xref">1.1</a>.  <a href="#name-scope" class="internal xref">Scope</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.1.2.2">
+                <p id="section-toc.1-1.1.2.2.1" class="keepWithNext"><a href="#section-1.2" class="auto internal xref">1.2</a>.  <a href="#name-terminology" class="internal xref">Terminology</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.2">
+            <p id="section-toc.1-1.2.1"><a href="#section-2" class="auto internal xref">2</a>.  <a href="#name-convergence-layer-aspects" class="internal xref">Convergence Layer Aspects</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3">
+            <p id="section-toc.1-1.3.1"><a href="#section-3" class="auto internal xref">3</a>.  <a href="#name-convergence-layer-adapter-s" class="internal xref">Convergence Layer Adapter Services</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.1">
+                <p id="section-toc.1-1.3.2.1.1"><a href="#section-3.1" class="auto internal xref">3.1</a>.  <a href="#name-bundle-transmission" class="internal xref">Bundle Transmission</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.2">
+                <p id="section-toc.1-1.3.2.2.1"><a href="#section-3.2" class="auto internal xref">3.2</a>.  <a href="#name-bundle-reception" class="internal xref">Bundle Reception</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.3">
+                <p id="section-toc.1-1.3.2.3.1"><a href="#section-3.3" class="auto internal xref">3.3</a>.  <a href="#name-persistent-session-keeping" class="internal xref">Persistent Session Keeping</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.3.2.4">
+                <p id="section-toc.1-1.3.2.4.1"><a href="#section-3.4" class="auto internal xref">3.4</a>.  <a href="#name-passive-listening" class="internal xref">Passive Listening</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.4">
+            <p id="section-toc.1-1.4.1"><a href="#section-4" class="auto internal xref">4</a>.  <a href="#name-security-considerations" class="internal xref">Security Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.5">
+            <p id="section-toc.1-1.5.1"><a href="#section-5" class="auto internal xref">5</a>.  <a href="#name-iana-considerations" class="internal xref">IANA Considerations</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6">
+            <p id="section-toc.1-1.6.1"><a href="#section-6" class="auto internal xref">6</a>.  <a href="#name-references" class="internal xref">References</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.1">
+                <p id="section-toc.1-1.6.2.1.1"><a href="#section-6.1" class="auto internal xref">6.1</a>.  <a href="#name-normative-references" class="internal xref">Normative References</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.6.2.2">
+                <p id="section-toc.1-1.6.2.2.1"><a href="#section-6.2" class="auto internal xref">6.2</a>.  <a href="#name-informative-references" class="internal xref">Informative References</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7">
+            <p id="section-toc.1-1.7.1"><a href="#appendix-A" class="auto internal xref">Appendix A</a>.  <a href="#name-applicability-to-existing-c" class="internal xref">Applicability to Existing Convergence Layers</a></p>
+<ul class="compact toc ulBare ulEmpty">
+<li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.1">
+                <p id="section-toc.1-1.7.2.1.1"><a href="#appendix-A.1" class="auto internal xref">A.1</a>.  <a href="#name-udpcl" class="internal xref">UDPCL</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.2">
+                <p id="section-toc.1-1.7.2.2.1"><a href="#appendix-A.2" class="auto internal xref">A.2</a>.  <a href="#name-tcpcl" class="internal xref">TCPCL</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.3">
+                <p id="section-toc.1-1.7.2.3.1"><a href="#appendix-A.3" class="auto internal xref">A.3</a>.  <a href="#name-ltpcl" class="internal xref">LTPCL</a></p>
+</li>
+              <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.7.2.4">
+                <p id="section-toc.1-1.7.2.4.1"><a href="#appendix-A.4" class="auto internal xref">A.4</a>.  <a href="#name-bibe" class="internal xref">BIBE</a></p>
+</li>
+            </ul>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.8">
+            <p id="section-toc.1-1.8.1"><a href="#appendix-B" class="auto internal xref"></a><a href="#name-acknowledgments" class="internal xref">Acknowledgments</a></p>
+</li>
+          <li class="compact toc ulBare ulEmpty" id="section-toc.1-1.9">
+            <p id="section-toc.1-1.9.1"><a href="#appendix-C" class="auto internal xref"></a><a href="#name-authors-address" class="internal xref">Author's Address</a></p>
+</li>
+        </ul>
+</nav>
+</section>
+</div>
+<div id="sec-intro">
+<section id="section-1">
+      <h2 id="name-introduction">
+<a href="#section-1" class="section-number selfRef">1. </a><a href="#name-introduction" class="section-name selfRef">Introduction</a>
+      </h2>
+<p id="section-1-1">
+Before this document, each convergence layer (CL) definition included (or implied) its own set of specific services and primitives that would be supported by an associated convergence layer adapter (CLA).
+From the perspective of capabilities and behaviors of an individual CLA this is sensible, but from the perspective of the Bundle Protocol Agent (BPA) this lack of consistency in both capability and naming makes the logical interface between BPA and its CLAs difficult to manage and in many cases implementation dependent (both in capability and in terminology).<a href="#section-1-1" class="pilcrow">¶</a></p>
+<p id="section-1-2">
+The task of this document is thus to harmonize the CLA interface into a set of distinct and consistently named services, each composed of primitives inspired by the ISO naming convention of "request" meaning a service user intending to invoke an activity on the service provider and "indication" meaning the service provider giving status of an activity to a service user.<a href="#section-1-2" class="pilcrow">¶</a></p>
+<p id="section-1-3">
+Because the wide variety of transport mechanisms used across the various CLs and their differing aspects (see <a href="#sec-aspects" class="auto internal xref">Section 2</a>) many of the requests or indications do not apply and are not used or usable by any particular CLA (see <a href="#sec-applicability" class="auto internal xref">Appendix A</a> for some examples).<a href="#section-1-3" class="pilcrow">¶</a></p>
+<section id="section-1.1">
+        <h3 id="name-scope">
+<a href="#section-1.1" class="section-number selfRef">1.1. </a><a href="#name-scope" class="section-name selfRef">Scope</a>
+        </h3>
+<p id="section-1.1-1">
+This document is based on existing CLs which transport over UDP <span>[<a href="#RFC7122" class="cite xref">RFC7122</a>]</span> <span>[<a href="#CCSDS-BP" class="cite xref">CCSDS-BP</a>]</span>, TCP <span>[<a href="#RFC9174" class="cite xref">RFC9174</a>]</span>, LTP/UDP <span>[<a href="#RFC5326" class="cite xref">RFC5326</a>]</span> <span>[<a href="#RFC7122" class="cite xref">RFC7122</a>]</span>, and BIBE <span>[<a href="#I-D.ietf-dtn-bibect" class="cite xref">I-D.ietf-dtn-bibect</a>]</span>.<a href="#section-1.1-1" class="pilcrow">¶</a></p>
+<p id="section-1.1-2">
+This document does not specify any additional services needed of existing CL specifications.
+In cases where existing CLs deviate from these service definitions it represents a possible future enhancement to the CL to harmonize it with these idealized services.<a href="#section-1.1-2" class="pilcrow">¶</a></p>
+</section>
+<div id="sec-terminology">
+<section id="section-1.2">
+        <h3 id="name-terminology">
+<a href="#section-1.2" class="section-number selfRef">1.2. </a><a href="#name-terminology" class="section-name selfRef">Terminology</a>
+        </h3>
+<p id="section-1.2-1">
+The key words "MUST", "MUST NOT", "REQUIRED", "SHALL", "SHALL NOT", "SHOULD", "SHOULD NOT", "RECOMMENDED", "NOT RECOMMENDED", "MAY", and "OPTIONAL" in this document are to be interpreted as described in BCP 14 <span>[<a href="#RFC2119" class="cite xref">RFC2119</a>]</span> <span>[<a href="#RFC8174" class="cite xref">RFC8174</a>]</span> when, and only when, they appear in all capitals, as shown here.<a href="#section-1.2-1" class="pilcrow">¶</a></p>
+<p id="section-1.2-2">
+The following are definitions necessary to understand the services and functions in this document.<a href="#section-1.2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-1.2-3">
+          <dt id="section-1.2-3.1">Bundle Protocol:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.2">The definition of the data contained in bundles and the encoding of that data.<a href="#section-1.2-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.3">Bundle Protocol Agent:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.4">The entity which performs the functions of the bundle protocol.<a href="#section-1.2-3.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.5">Convergence Layer:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.6">The definition of how an encoded bundle can be transferred over a particular underlying transport.<a href="#section-1.2-3.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.7">Convergence Layer Adapter:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.8">The entity which performs the functions of a specific convergence layer.<a href="#section-1.2-3.8" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.9">Transfer:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.10">The activity of one CLA transmitting and some number of CLAs receiving a bundle.<a href="#section-1.2-3.10" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.11">Transmission:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.12">A transfer from the perspective of the transmitting CLA.<a href="#section-1.2-3.12" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.13">Transmission ID:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.14">A unique identifier for a specific <a href="#sec-srv-bundle-tx" class="internal xref">Bundle Transmission</a> service instance.<a href="#section-1.2-3.14" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.15">Reception:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.16">A transfer from the perspective of the receiving CLA.<a href="#section-1.2-3.16" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.17">Reception ID:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.18">A unique identifier for a specific <a href="#sec-srv-bundle-rx" class="internal xref">Bundle Reception</a> service instance.<a href="#section-1.2-3.18" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.19">Session:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.20">A persistent connection of a transport along with additional CLA state related to that connection.<a href="#section-1.2-3.20" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+<dt id="section-1.2-3.21">Session ID:</dt>
+          <dd style="margin-left: 1.5em" id="section-1.2-3.22">A unique identifier for a specific <a href="#sec-srv-session" class="internal xref">Persistent Session Keeping</a> service instance.<a href="#section-1.2-3.22" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-aspects">
+<section id="section-2">
+      <h2 id="name-convergence-layer-aspects">
+<a href="#section-2" class="section-number selfRef">2. </a><a href="#name-convergence-layer-aspects" class="section-name selfRef">Convergence Layer Aspects</a>
+      </h2>
+<p id="section-2-1">
+This section attempts to categorize existing CLs by a few different critical aspects of their behavior.
+This expands on the general terminology of <a href="#sec-terminology" class="auto internal xref">Section 1.2</a> with definitions specific to those aspects.<a href="#section-2-1" class="pilcrow">¶</a></p>
+<p id="section-2-2">
+There is currently no concept of a "streaming" CL.
+All CLAs must operate with bundles as their service data unit (SDU) so must behave as a datagram service to the BPA.
+In the case where the underlying transport is an octet stream (<em>e.g.</em>, the TCPCL using TCP) the CL itself must encapsulate the encoded bundles into the transport stream.<a href="#section-2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-2-3">
+        <dt id="section-2-3.1">Reliable or Unreliable</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.2">
+          <p id="section-2-3.2.1">
+The reliability of a CL is determined by whether or not the CLA transmitting a bundle has a positive indication of the reception of the bundle above the transport itself.
+For example, it is not enough for TCP to acknowledge that the TCP/IP stack has received the segment; the CLA MUST have feedback from the receiving BPA that the bundle has progressed all the way "into the receiving node."<a href="#section-2-3.2.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-3.3">Atomic or Segmented</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.4">
+          <p id="section-2-3.4.1">
+Although the reliability of a CL is at the level of the entire bundle, some CLs also provide segmentation of the bundle data in order to provide additional capabilities such as selective retransmission, intermediate progress, or interleaving of transfers on the same stream.
+In the absence of segmentation a CL performs its transfers atomically; either all or nothing.<a href="#section-2-3.4.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-3.5">Connection-oriented or Connectionless</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.6">
+          <p id="section-2-3.6.1">
+Some CLs operate over transports that require establishment of connections before transfers can be made, while other CLs operate on connectionless transports which can transfer datagrams unsolicited.
+In some cases a security association can necessitate a connection-like shared state between peers.
+Even for connectionless transports there can be recommendations about "conversation" state keeping to allow the transport to operate consistently through middleboxes.<a href="#section-2-3.6.1" class="pilcrow">¶</a></p>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-3.7">Unicast or Multicast</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.8">
+At the network level, some CLs can only operate properly with a unicast next-hop destination.
+For many reliable transports, this is a natural limitation of the protocol.
+Other transports can operate with multicast (or broadcast) destinations either because they are not reliable (<em>e.g.</em>, UDP or LTP green-part) or because they use a multicast-aware retransmission scheme (<em>e.g.</em>, NORM <span>[<a href="#RFC5740" class="cite xref">RFC5740</a>]</span>).<a href="#section-2-3.8" class="pilcrow">¶</a>
+</dd>
+        <dd class="break"></dd>
+<dt id="section-2-3.9">Size Limitations</dt>
+        <dd style="margin-left: 1.5em" id="section-2-3.10">
+          <p id="section-2-3.10.1">
+The BPv7 specification <span>[<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> does not impose an upper-bound on either the size of the payload data or the size of the overall encoded bundle.
+Despite this, some CLs have a natural upper bound on the size of bundle which can be transferred.
+In other cases, a profile of the CL can reduce the effective upper bound of bundle size.<a href="#section-2-3.10.1" class="pilcrow">¶</a></p>
+<p id="section-2-3.10.2">
+While the LTPCL and TCPCL technically allow a 64-bit transfer size, the UDPCL by its nature is limited to 64KiB on IPv4 and only in certain circumstances can be enlarged on IPv6 jumbograms <span><a href="https://rfc-editor.org/rfc/rfc2675#section-4" class="relref">Section 4</a> of [<a href="#RFC2675" class="cite xref">RFC2675</a>]</span>.
+Large datagram sizes however will run into path MTU and fragmentation issues <span>[<a href="#RFC8900" class="cite xref">RFC8900</a>]</span>.<a href="#section-2-3.10.2" class="pilcrow">¶</a></p>
+</dd>
+      <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-cla-services">
+<section id="section-3">
+      <h2 id="name-convergence-layer-adapter-s">
+<a href="#section-3" class="section-number selfRef">3. </a><a href="#name-convergence-layer-adapter-s" class="section-name selfRef">Convergence Layer Adapter Services</a>
+      </h2>
+<p id="section-3-1">
+Each of the following subsections defines an independent service provided by a CLA to a BPA.
+Depending on the mechanics of the specific CLA, not all of the requests or indications listed here will be meaningful or used.<a href="#section-3-1" class="pilcrow">¶</a></p>
+<div id="sec-srv-bundle-tx">
+<section id="section-3.1">
+        <h3 id="name-bundle-transmission">
+<a href="#section-3.1" class="section-number selfRef">3.1. </a><a href="#name-bundle-transmission" class="section-name selfRef">Bundle Transmission</a>
+        </h3>
+<p id="section-3.1-1">
+The principal purpose of any CLA is to allow a BPA to transmit bundle data to a peer node's BPA.
+Because of this, all CLAs <span class="bcp14">SHALL</span> support the Bundle Transmission service.<a href="#section-3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1-2">
+Each transmission is a time-bounded activity to transfer a bundle from the local CLA to a peer CLA.
+Transmissions are always initiated by the local BPA, and it is out of scope of this document to determine when a bundle is ready for transmission over a particular CLA to a particular peer.<a href="#section-3.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1-3">
+Each transmission is identified by a CLA-defined transmission ID which is unique within the context of a single BPA--CLA association.
+The bundle identity is not a sufficient transmission ID because a CLA can request duplicated transmissions (across time or simultaneously) of the same bundle from the same CLA.<a href="#section-3.1-3" class="pilcrow">¶</a></p>
+<span id="name-activity-flow-for-bundle-tr"></span><figure id="figure-1">
+          <div class="alignCenter art-ascii-art art-text artwork" id="section-3.1-4.1">
+<pre>
+   +---------------+              error
+   |     Begin     +------------+ before
+   |  Transmission |            v start
+   |    Request    |    +---------------+
+   +-------+-------+    |  Transmission |
+           |            |    Failure    |
+           v            |   Indication  |
+   +---------------+    +---------------+
+   |  Transmission |            ^
++--+    Started    |            | error
+|  |   Indication  +------------+ after
+|  +-------+-------+            | start
+|          |                    |
+|          v                    |
+|  +---------------+            |
+|  |  Transmission |            |
+|  |    Progress   +------------+
+|  |   Indication  |            |
+|  +-------+-------+    +-------+-------+
+|          |            |   Interrupt   |
+|          v            |&gt; Transmission |
+|  +---------------+    |    Request    |
+|  |  Transmission |    +---------------+
++-&gt;|    Success    |
+   |   Indication  |
+   +---------------+
+</pre>
+</div>
+<figcaption><a href="#figure-1" class="selfRef">Figure 1</a>:
+<a href="#name-activity-flow-for-bundle-tr" class="selfRef">Activity flow for Bundle Transmission</a>
+          </figcaption></figure>
+<p id="section-3.1-5">
+The primitives associated with this service are in the following subsections.<a href="#section-3.1-5" class="pilcrow">¶</a></p>
+<div id="sec-srv-bundle-tx-begin">
+<section id="section-3.1.1">
+          <h4 id="name-begin-transmission">
+<a href="#section-3.1.1" class="section-number selfRef">3.1.1. </a><a href="#name-begin-transmission" class="section-name selfRef">Begin Transmission</a>
+          </h4>
+<p id="section-3.1.1-1">
+The BPA requests transfer of an individual encoded bundle with parameters indicating to what CLA peer the transmission is destined.
+Any queueing of transmissions is the obligation of the BPA, as soon as the request is made to the CLA the transmission <span class="bcp14">MAY</span> begin.<a href="#section-3.1.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-2">
+Each transmission <span class="bcp14">SHALL</span> include an absolute time deadline based on at least the bundle lifetime.
+The BPA <span class="bcp14">MAY</span> expand or reduce the deadline based on other factors including: the bundle size, the expected or estimated network throughput and loss rate, the expected or estimated one-way light time (OWLT) to and from the peer.<a href="#section-3.1.1-2" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-3">
+Parameters to this request include:<a href="#section-3.1.1-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1.1-4">
+            <dt id="section-3.1.1-4.1">Bundle data:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.1-4.2">The bundle encoded as an octet string to be transmitted.<a href="#section-3.1.1-4.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.1.1-4.3">Peer transport parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.1-4.4">Network and transport parameters necessary to either identify an existing peer connection (if applicable) or begin transport of the bundle.<a href="#section-3.1.1-4.4" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.1.1-4.5">Transfer deadline:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.1-4.6">The amount of time, from the request, for which is acceptable for the CLA to operate before either Success or Failure.<a href="#section-3.1.1-4.6" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.1.1-4.7">Security Needs:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.1-4.8">
+              <p id="section-3.1.1-4.8.1">
+Along with the bundle data itself, the BPA provides requirements about the transport security such as: the required identity of the peer, requirement for authentication, if the transport must be confidential or integrity-checked, <em>etc.</em><a href="#section-3.1.1-4.8.1" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-4.8.2">
+Many of the needs are optional rather than purely boolean in that some aspects of security can be labeled as "don't care" to allow opportunistic security <span>[<a href="#RFC7435" class="cite xref">RFC7435</a>]</span>.<a href="#section-3.1.1-4.8.2" class="pilcrow">¶</a></p>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-3.1.1-5">
+The result of this request <span class="bcp14">SHALL</span> be a unique transmission ID used to correlate later interactions with the request.<a href="#section-3.1.1-5" class="pilcrow">¶</a></p>
+<p id="section-3.1.1-6">
+Following this request exactly one of the following <span class="bcp14">SHALL</span> be indicated: <a href="#sec-srv-bundle-tx-started" class="internal xref">Transmission Started</a>, if the transmission is in fact started, or <a href="#sec-srv-bundle-tx-failure" class="internal xref">Transmission Failure</a> if the CLA cannot accommodate the request for whatever reason.<a href="#section-3.1.1-6" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-srv-bundle-tx-started">
+<section id="section-3.1.2">
+          <h4 id="name-transmission-started">
+<a href="#section-3.1.2" class="section-number selfRef">3.1.2. </a><a href="#name-transmission-started" class="section-name selfRef">Transmission Started</a>
+          </h4>
+<p id="section-3.1.2-1">
+Even for unreliable transports, the CLA indicates to the BPA when the transmission is actually started.
+Because of contention for resources (<em>e.g.</em>, socket writes or rate-limiting tokens) the actual start of transmission can be delayed from the request to begin transmission.<a href="#section-3.1.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.2-2">
+Parameters to this indication include:<a href="#section-3.1.2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1.2-3">
+            <dt id="section-3.1.2-3.1">Transmission ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.2-3.2">The correlator for the bundle transmission.<a href="#section-3.1.2-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-bundle-tx-progress">
+<section id="section-3.1.3">
+          <h4 id="name-transmission-progress">
+<a href="#section-3.1.3" class="section-number selfRef">3.1.3. </a><a href="#name-transmission-progress" class="section-name selfRef">Transmission Progress</a>
+          </h4>
+<p id="section-3.1.3-1">
+Not all CLAs will support the notion of a segmented transfer.
+For those that do, this indication provides information to the BPA about how far along a transmission has progressed since the start.
+If a transmission is completed in a single unit, either the whole data atomically or as a single segment, this indication <span class="bcp14">SHALL NOT</span> be provided.
+The size in this indication <span class="bcp14">SHALL</span> be relative to the bundle data being transmitted and not include any segmentation or transport overhead.
+When the CLA is reliable, this indication <span class="bcp14">SHALL</span> include only peer acknowledged progress.<a href="#section-3.1.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.3-2">
+Parameters to this indication include:<a href="#section-3.1.3-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1.3-3">
+            <dt id="section-3.1.3-3.1">Transmission ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.3-3.2">The correlator for the bundle transmission.<a href="#section-3.1.3-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.1.3-3.3">Current size:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.3-3.4">The accumulated data size sent so far.<a href="#section-3.1.3-3.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-bundle-tx-success">
+<section id="section-3.1.4">
+          <h4 id="name-transmission-success">
+<a href="#section-3.1.4" class="section-number selfRef">3.1.4. </a><a href="#name-transmission-success" class="section-name selfRef">Transmission Success</a>
+          </h4>
+<p id="section-3.1.4-1">
+This indication concludes a transmission and informs the BPA that it was a success.
+An unreliable CL will always indicate success upon completion.
+When the CLA is reliable, this indication <span class="bcp14">SHALL</span> include only peer acknowledged progress.<a href="#section-3.1.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.4-2">
+Parameters to this indication include:<a href="#section-3.1.4-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1.4-3">
+            <dt id="section-3.1.4-3.1">Transmission ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.4-3.2">The correlator for the bundle transmission.<a href="#section-3.1.4-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.1.4-3.3">Security Metadata:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.4-3.4">Along with the bundle data itself, the CLA provides metadata about the transport security such as: the identity of the peer, whether or not it was authenticated, if the transport is confidential or integrity-checked, <em>etc.</em><a href="#section-3.1.4-3.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-bundle-tx-failure">
+<section id="section-3.1.5">
+          <h4 id="name-transmission-failure">
+<a href="#section-3.1.5" class="section-number selfRef">3.1.5. </a><a href="#name-transmission-failure" class="section-name selfRef">Transmission Failure</a>
+          </h4>
+<p id="section-3.1.5-1">
+This indication concludes a transmission and informs the BPA that a failure occurred.
+The reason for the failure is CL-dependent and <span class="bcp14">MAY</span> be absent if a CL has non-specific failures.<a href="#section-3.1.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.5-2">
+Parameters to this indication include:<a href="#section-3.1.5-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1.5-3">
+            <dt id="section-3.1.5-3.1">Transmission ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.5-3.2">The correlator for the bundle transmission.<a href="#section-3.1.5-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.1.5-3.3">Reason:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.5-3.4">An optional reason for why the transmission failed.<a href="#section-3.1.5-3.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-bundle-tx-interrupt">
+<section id="section-3.1.6">
+          <h4 id="name-interrupt-transmission">
+<a href="#section-3.1.6" class="section-number selfRef">3.1.6. </a><a href="#name-interrupt-transmission" class="section-name selfRef">Interrupt Transmission</a>
+          </h4>
+<p id="section-3.1.6-1">
+This request provides a way for the BPA to cancel transmission any time after it is started and before its deadline has expired.<a href="#section-3.1.6-1" class="pilcrow">¶</a></p>
+<p id="section-3.1.6-2">
+Parameters to this request include:<a href="#section-3.1.6-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.1.6-3">
+            <dt id="section-3.1.6-3.1">Transmission ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.1.6-3.2">The correlator for the bundle transmission.<a href="#section-3.1.6-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-3.1.6-4">
+Following this request the <a href="#sec-srv-bundle-tx-failure" class="internal xref">Transmission Failure</a> <span class="bcp14">MAY</span> be indicated if the interruption applied before the transmission finished.<a href="#section-3.1.6-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-srv-bundle-rx">
+<section id="section-3.2">
+        <h3 id="name-bundle-reception">
+<a href="#section-3.2" class="section-number selfRef">3.2. </a><a href="#name-bundle-reception" class="section-name selfRef">Bundle Reception</a>
+        </h3>
+<p id="section-3.2-1">
+A necessary part of any CLA is the ability to receive from peer nodes BPA in an asynchronous manner.
+Because of this, all CLAs <span class="bcp14">SHALL</span> support the Bundle Reception service.<a href="#section-3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2-2">
+Each reception is a time-bounded activity to transfer a bundle from a peer CLA to the local CLA.
+Receptions are always initiated by a peer CLA, so the start of a reception is an indication.
+Before a reception can be started the local CLA needs to either be in an established session (where applicable, see <a href="#sec-srv-session" class="auto internal xref">Section 3.3</a>) or listening for datagrams (where applicable, see <a href="#sec-srv-listen" class="auto internal xref">Section 3.4</a>).<a href="#section-3.2-2" class="pilcrow">¶</a></p>
+<p id="section-3.2-3">
+Each reception is identified by a CLA-defined reception ID which is unique within the context of a single BPA--CLA association.
+The bundle identity is not a sufficient reception ID because a CLA can receive duplicated transmissions (across time or simultaneously) of the same bundle and also the reception ID is needed before any bundle primary block data is received.<a href="#section-3.2-3" class="pilcrow">¶</a></p>
+<span id="name-activity-flow-for-bundle-re"></span><figure id="figure-2">
+          <div class="alignCenter art-ascii-art art-text artwork" id="section-3.2-4.1">
+<pre>
+   +---------------+
+   |    Passive    |
+   |   Listening   |    +---------------+
+   +-------+-------+    |   Reception   |
+           |            |    Failure    |
+           v            |   Indication  |
+   +---------------+    +---------------+
+   |   Reception   |            ^
++--+    Started    |            |
+|  |   Indication  +------------+
+|  +-------+-------+            |
+|          |                    |
+|          v                    |
+|  +---------------+            |
+|  |   Reception   |            |
+|  |    Progress   +------------+
+|  |   Indication  |            |
+|  +-------+-------+    +-------+-------+
+|          |            |   Interrupt   |
+|          v            |&gt;  Reception   |
+|  +---------------+    |    Request    |
+|  |   Reception   |    +---------------+
++-&gt;|    Success    |
+   |   Indication  |
+   +---------------+
+</pre>
+</div>
+<figcaption><a href="#figure-2" class="selfRef">Figure 2</a>:
+<a href="#name-activity-flow-for-bundle-re" class="selfRef">Activity flow for Bundle Reception</a>
+          </figcaption></figure>
+<p id="section-3.2-5">
+The primitives associated with this service are in the following subsections.<a href="#section-3.2-5" class="pilcrow">¶</a></p>
+<div id="sec-srv-bundle-rx-started">
+<section id="section-3.2.1">
+          <h4 id="name-reception-started">
+<a href="#section-3.2.1" class="section-number selfRef">3.2.1. </a><a href="#name-reception-started" class="section-name selfRef">Reception Started</a>
+          </h4>
+<p id="section-3.2.1-1">
+The CLA indicates to the BPA when a reception is started.<a href="#section-3.2.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.1-2">
+Parameters to this indication include:<a href="#section-3.2.1-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.2.1-3">
+            <dt id="section-3.2.1-3.1">Reception ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.1-3.2">The correlator for the bundle reception.<a href="#section-3.2.1-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.2.1-3.3">Peer transport parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.1-3.4">Network and transport parameters necessary to identify the peer sending the bundle.<a href="#section-3.2.1-3.4" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.2.1-3.5">Total size:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.1-3.6">An optional expected size of the bundle data.<a href="#section-3.2.1-3.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-bundle-rx-progress">
+<section id="section-3.2.2">
+          <h4 id="name-reception-progress">
+<a href="#section-3.2.2" class="section-number selfRef">3.2.2. </a><a href="#name-reception-progress" class="section-name selfRef">Reception Progress</a>
+          </h4>
+<p id="section-3.2.2-1">
+Not all CLs will support the notion of a segmented transfer.
+For those that do, this indication provides information to the BPA about how far along a reception has progressed since the start.
+If a reception is completed in a single unit, either the whole data atomically or as a single segment, this indication <span class="bcp14">SHALL NOT</span> be provided.
+The size in this indication <span class="bcp14">SHALL</span> be relative to the bundle data being transmitted and not include any segmentation or transport overhead.
+When the CL is reliable, this indication <span class="bcp14">SHALL</span> include only peer acknowledged progress.<a href="#section-3.2.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.2-2">
+Parameters to this indication include:<a href="#section-3.2.2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.2.2-3">
+            <dt id="section-3.2.2-3.1">Reception ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.2-3.2">The correlator for the bundle reception.<a href="#section-3.2.2-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.2.2-3.3">Current size:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.2-3.4">The accumulated data size received so far. This size does not necessarily need to be contiguous or at the head of the bundle data.<a href="#section-3.2.2-3.4" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.2.2-3.5">Current data head:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.2-3.6">An optional chunk of contiguous data at the head of the total bundle data. For CLs that can receive data out-of-order this <span class="bcp14">MAY</span> be absent even when the current size is non-zero.<a href="#section-3.2.2-3.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-bundle-rx-success">
+<section id="section-3.2.3">
+          <h4 id="name-reception-success">
+<a href="#section-3.2.3" class="section-number selfRef">3.2.3. </a><a href="#name-reception-success" class="section-name selfRef">Reception Success</a>
+          </h4>
+<p id="section-3.2.3-1">
+This indication concludes a reception and informs the BPA that it was a success as well as providing the actual bundle data received.<a href="#section-3.2.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.3-2">
+Parameters to this indication include:<a href="#section-3.2.3-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.2.3-3">
+            <dt id="section-3.2.3-3.1">Reception ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.3-3.2">The correlator for the bundle reception.<a href="#section-3.2.3-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.2.3-3.3">Bundle data:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.3-3.4">The received bundle encoded as an octet string.<a href="#section-3.2.3-3.4" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.2.3-3.5">Security Metadata:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.3-3.6">Along with the bundle data itself, the CLA provides metadata about the transport security such as: the identity of the peer, whether or not it was authenticated, if the transport is confidential or integrity-checked, <em>etc.</em><a href="#section-3.2.3-3.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-bundle-rx-failure">
+<section id="section-3.2.4">
+          <h4 id="name-reception-failure">
+<a href="#section-3.2.4" class="section-number selfRef">3.2.4. </a><a href="#name-reception-failure" class="section-name selfRef">Reception Failure</a>
+          </h4>
+<p id="section-3.2.4-1">
+This indication concludes a reception and informs the BPA that a failure occurred.
+The reason for the failure is CL-dependent and <span class="bcp14">MAY</span> be absent if a CL has non-specific failures.<a href="#section-3.2.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.4-2">
+Parameters to this indication include:<a href="#section-3.2.4-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.2.4-3">
+            <dt id="section-3.2.4-3.1">Reception ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.4-3.2">The correlator for the bundle reception.<a href="#section-3.2.4-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.2.4-3.3">Reason:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.4-3.4">An optional reason for why the reception failed.<a href="#section-3.2.4-3.4" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-bundle-rx-interrupt">
+<section id="section-3.2.5">
+          <h4 id="name-interrupt-reception">
+<a href="#section-3.2.5" class="section-number selfRef">3.2.5. </a><a href="#name-interrupt-reception" class="section-name selfRef">Interrupt Reception</a>
+          </h4>
+<p id="section-3.2.5-1">
+This request provides a way for the BPA to refuse reception any time after it is started.<a href="#section-3.2.5-1" class="pilcrow">¶</a></p>
+<p id="section-3.2.5-2">
+If a CLA indicates current data head in its Reception Progress indication, this can be used to inspect the bundle's primary block before a large payload is received and preemptively refuse the bundle to save time and network volume.<a href="#section-3.2.5-2" class="pilcrow">¶</a></p>
+<p id="section-3.2.5-3">
+Parameters to this request include:<a href="#section-3.2.5-3" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.2.5-4">
+            <dt id="section-3.2.5-4.1">Reception ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.2.5-4.2">The correlator for the bundle reception.<a href="#section-3.2.5-4.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-3.2.5-5">
+Following this request the <a href="#sec-srv-bundle-rx-failure" class="internal xref">Reception Failure</a> <span class="bcp14">MAY</span> be indicated if the interruption applied before the reception finished.<a href="#section-3.2.5-5" class="pilcrow">¶</a></p>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-srv-session">
+<section id="section-3.3">
+        <h3 id="name-persistent-session-keeping">
+<a href="#section-3.3" class="section-number selfRef">3.3. </a><a href="#name-persistent-session-keeping" class="section-name selfRef">Persistent Session Keeping</a>
+        </h3>
+<p id="section-3.3-1">
+An optional service provided by connection-oriented CLs, such as the TCPCL of <span>[<a href="#RFC9174" class="cite xref">RFC9174</a>]</span>, is the ability to establish a session with a peer node before any bundles need to be sent to that peer.
+The distinction between a connection and session is that the connection is a service provided by the underlying transport while the session is a service of the convergence layer itself.
+Additionally, sessions can include a security association between peers which can amortize much of the processing time associated with authenticating and authorizing a peer connection.<a href="#section-3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3-2">
+Sessions <span class="bcp14">MAY</span> be initiated by the local CLA or as a response to passive listening by the local CLA to peer initiations.
+In either case, the Session State Changed indication is produced by the CLA as the sessions progress through to an established (or a failed or terminated) state.<a href="#section-3.3-2" class="pilcrow">¶</a></p>
+<p id="section-3.3-3">
+Whether or not a CLA requires a session to perform the actual transfer of bundles does not affect the way in which the bundle-data-focused services in <a href="#sec-srv-bundle-tx" class="auto internal xref">Section 3.1</a> and <a href="#sec-srv-bundle-rx" class="auto internal xref">Section 3.2</a> operate.
+A CLA which uses sessions <span class="bcp14">SHOULD</span> transparently create a sessions as needed to perform a Bundle Transmission; the Transmission Started indication would just be delayed until after the session is established and ready for use.
+In the case where a session can not be established in a timely manner, the <a href="#sec-srv-bundle-tx-failure" class="internal xref">Transmission Failure</a> indication would be used to inform the BPA that the bundle was not able to be sent.<a href="#section-3.3-3" class="pilcrow">¶</a></p>
+<p id="section-3.3-4">
+In order to fit this service model, CLAs <span class="bcp14">SHALL</span> include pseudo-states which are associated with the session ending.
+Doing so avoids the need for a separate "session ended" indication.<a href="#section-3.3-4" class="pilcrow">¶</a></p>
+<span id="name-activity-flow-for-session-k"></span><figure id="figure-3">
+          <div class="alignCenter art-ascii-art art-text artwork" id="section-3.3-5.1">
+<pre>
++---------------+
+|    Attempt    |   +---------------+
+|&gt;   Session    |   |    Passive    |
+|    Request    |   |   Listening   |
++-------+-------+   +-------+-------+
+        |                   |
+        +---------+---------+
+                  |
+                  v
+          +---------------+
+          | Session State |
+          |    Changed    |&lt;-+
+          |   Indication  |  |
+          +-------+-------+  |
+                  |          |
+                  +----------+
+                             |
+          +---------------+  |
+          |   Terminate   |  |
+          |&gt;   Session    +--+
+          |    Request    |
+          +---------------+
+</pre>
+</div>
+<figcaption><a href="#figure-3" class="selfRef">Figure 3</a>:
+<a href="#name-activity-flow-for-session-k" class="selfRef">Activity flow for session keeping</a>
+          </figcaption></figure>
+<p id="section-3.3-6">
+The primitives associated with this service are in the following subsections.<a href="#section-3.3-6" class="pilcrow">¶</a></p>
+<div id="sec-srv-session-attempt">
+<section id="section-3.3.1">
+          <h4 id="name-attempt-session">
+<a href="#section-3.3.1" class="section-number selfRef">3.3.1. </a><a href="#name-attempt-session" class="section-name selfRef">Attempt Session</a>
+          </h4>
+<p id="section-3.3.1-1">
+This request allows the local BPA to initiate a session with a peer.
+The attempt to create a session will not necessarily result in a session eventually having an established state with the desired peer.
+Configuration of the local or peer BPA can result in a session not being able to become established.<a href="#section-3.3.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.1-2">
+Parameters to this request include:<a href="#section-3.3.1-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.3.1-3">
+            <dt id="section-3.3.1-3.1">Peer transport parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.3.1-3.2">Network and transport parameters necessary to identify the connection.<a href="#section-3.3.1-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-3.3.1-4">
+The result of this request <span class="bcp14">SHALL</span> be a unique session ID used to correlate later interactions with the session.
+The peer transport parameters are not a sufficient session identifier because a CLA can request and/or establish multiple sessions with the same peer.<a href="#section-3.3.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-srv-session-terminate">
+<section id="section-3.3.2">
+          <h4 id="name-terminate-session">
+<a href="#section-3.3.2" class="section-number selfRef">3.3.2. </a><a href="#name-terminate-session" class="section-name selfRef">Terminate Session</a>
+          </h4>
+<p id="section-3.3.2-1">
+This request allows the BPA to preemptively terminate a session with a peer.
+In the case where a CLA allows a clean termination procedure that will avoid transmission or reception failures, it is better to terminate than to simply stop the CLA.<a href="#section-3.3.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.2-2">
+Parameters to this request include:<a href="#section-3.3.2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.3.2-3">
+            <dt id="section-3.3.2-3.1">Session ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.3.2-3.2">The correlator for the session.<a href="#section-3.3.2-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-session-state-changed">
+<section id="section-3.3.3">
+          <h4 id="name-session-state-changed">
+<a href="#section-3.3.3" class="section-number selfRef">3.3.3. </a><a href="#name-session-state-changed" class="section-name selfRef">Session State Changed</a>
+          </h4>
+<p id="section-3.3.3-1">
+The CLA indicates to the BPA when the state of a session changes in a way that would be visible to the BPA.
+The available states are specific to the CLA but can include pre-established handshaking states and pre-termination cleanup states.<a href="#section-3.3.3-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.3-2">
+Parameters to this indication include:<a href="#section-3.3.3-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.3.3-3">
+            <dt id="section-3.3.3-3.1">Session ID:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.3.3-3.2">The correlator for the session.<a href="#section-3.3.3-3.2" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.3.3-3.3">Peer transport parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.3.3-3.4">Network and transport parameters necessary to identify the connection.<a href="#section-3.3.3-3.4" class="pilcrow">¶</a>
+</dd>
+            <dd class="break"></dd>
+<dt id="section-3.3.3-3.5">New state:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.3.3-3.6">The new state associated with the identified session.<a href="#section-3.3.3-3.6" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+<div id="sec-srv-session-list">
+<section id="section-3.3.4">
+          <h4 id="name-list-sessions">
+<a href="#section-3.3.4" class="section-number selfRef">3.3.4. </a><a href="#name-list-sessions" class="section-name selfRef">List Sessions</a>
+          </h4>
+<p id="section-3.3.4-1">
+This optional request allows a BPA to poll the status of existing connections to peer nodes.
+This includes connections in which the local node was the active entity (<em>i.e.</em>, the client) and in which the local node was the passive entity (<em>i.e.</em>, the server).<a href="#section-3.3.4-1" class="pilcrow">¶</a></p>
+<p id="section-3.3.4-2">
+The result of this request is list of session summaries, each containing:<a href="#section-3.3.4-2" class="pilcrow">¶</a></p>
+<ul class="compact">
+<li class="compact" id="section-3.3.4-3.1">Session ID<a href="#section-3.3.4-3.1" class="pilcrow">¶</a>
+</li>
+            <li class="compact" id="section-3.3.4-3.2">Peer parameters<a href="#section-3.3.4-3.2" class="pilcrow">¶</a>
+</li>
+            <li class="compact" id="section-3.3.4-3.3">Session state<a href="#section-3.3.4-3.3" class="pilcrow">¶</a>
+</li>
+          </ul>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-srv-listen">
+<section id="section-3.4">
+        <h3 id="name-passive-listening">
+<a href="#section-3.4" class="section-number selfRef">3.4. </a><a href="#name-passive-listening" class="section-name selfRef">Passive Listening</a>
+        </h3>
+<p id="section-3.4-1">
+In order to support the Bundle Reception service of <a href="#sec-srv-bundle-rx" class="auto internal xref">Section 3.2</a> and/or the Persistent Session service of <a href="#sec-srv-session" class="auto internal xref">Section 3.3</a>, a BPA must passively listen for network datagrams or connection attempts in accordance with the CL specifics.
+Because of this, all CLAs <span class="bcp14">SHALL</span> support the Passive Listening service.<a href="#section-3.4-1" class="pilcrow">¶</a></p>
+<aside id="section-3.4-2">
+          <p id="section-3.4-2.1">
+Just because this is mandatory to implement, does not mean that any particular instances of the CLA need to use this service.
+In the case of a connection-oriented CLA (<em>i.e.</em>, implementing the TCPCL) on one side of a firewall or NAT with restrictive access policies in place, it would not be meaningful to listen because the outside network cannot access that transport.
+In that case, the CLA can still transmit and receive bundles via an actively initiated persistent connection.
+For other, connectionless CLA (<em>i.e.</em>, implementing the LTPCL) it is always necessary to passively listen in order to perform the session/stream/transfer demultiplexing in the CLA.<a href="#section-3.4-2.1" class="pilcrow">¶</a></p>
+</aside>
+<p id="section-3.4-3">
+The primitives associated with this service are in the following subsections.<a href="#section-3.4-3" class="pilcrow">¶</a></p>
+<div id="sec-srv-listen-begin">
+<section id="section-3.4.1">
+          <h4 id="name-begin-listening">
+<a href="#section-3.4.1" class="section-number selfRef">3.4.1. </a><a href="#name-begin-listening" class="section-name selfRef">Begin Listening</a>
+          </h4>
+<p id="section-3.4.1-1">
+This request informs the CLA when it is to begin passive listening on a transport.
+Because a single CLA would either not be able to listen concurrently with the same parameters, or not logically gain anything by doing so, there is no concept here of a listening identifier; the transport parameters used to listen <em>are</em> the identifier.<a href="#section-3.4.1-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.1-2">
+Parameters to this request include:<a href="#section-3.4.1-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.4.1-3">
+            <dt id="section-3.4.1-3.1">Transport parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.4.1-3.2">Network and transport parameters necessary to enable the BPA to listen for datagrams or connection requests.<a href="#section-3.4.1-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+<p id="section-3.4.1-4">
+The result of this request <span class="bcp14">SHALL</span> be an indication of whether or not the request succeeded.
+There are many reasons why a set of parameters will not be able to listened for, including local network address assignments or other processes on the same host using the same transport parameters for listening.<a href="#section-3.4.1-4" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-srv-listen-end">
+<section id="section-3.4.2">
+          <h4 id="name-end-listening">
+<a href="#section-3.4.2" class="section-number selfRef">3.4.2. </a><a href="#name-end-listening" class="section-name selfRef">End Listening</a>
+          </h4>
+<p id="section-3.4.2-1">
+This request informs the CLA when it is to end passive listening on a transport.
+This request <span class="bcp14">SHALL</span> be coupled with an earlier Begin Listening request, as there is no concept of ending listening before beginning.<a href="#section-3.4.2-1" class="pilcrow">¶</a></p>
+<p id="section-3.4.2-2">
+Parameters to this request include:<a href="#section-3.4.2-2" class="pilcrow">¶</a></p>
+<span class="break"></span><dl class="dlParallel" id="section-3.4.2-3">
+            <dt id="section-3.4.2-3.1">Transport parameters:</dt>
+            <dd style="margin-left: 1.5em" id="section-3.4.2-3.2">Network and transport parameters identical to a Begin Listening request.<a href="#section-3.4.2-3.2" class="pilcrow">¶</a>
+</dd>
+          <dd class="break"></dd>
+</dl>
+</section>
+</div>
+</section>
+</div>
+</section>
+</div>
+<div id="sec-security">
+<section id="section-4">
+      <h2 id="name-security-considerations">
+<a href="#section-4" class="section-number selfRef">4. </a><a href="#name-security-considerations" class="section-name selfRef">Security Considerations</a>
+      </h2>
+<p id="section-4-1">
+This document does not define any requirements or structures which introduce new security considerations.
+All of the security considerations of specific convergence layers following this service model are all still applicable, including activities that are <em>not</em> covered by this model.<a href="#section-4-1" class="pilcrow">¶</a></p>
+<p id="section-4-2">
+The parameters available as "Security Needs" in <a href="#sec-srv-bundle-tx-begin" class="internal xref">Begin Transmission</a> or as "Security Metadata" in <a href="#sec-srv-bundle-rx-success" class="internal xref">Reception Success</a> are specific to the combination of the security capabilities of a CL and the security policy configured on a CLA.<a href="#section-4-2" class="pilcrow">¶</a></p>
+</section>
+</div>
+<div id="sec-iana">
+<section id="section-5">
+      <h2 id="name-iana-considerations">
+<a href="#section-5" class="section-number selfRef">5. </a><a href="#name-iana-considerations" class="section-name selfRef">IANA Considerations</a>
+      </h2>
+<p id="section-5-1">
+This document does not affect any IANA registries.<a href="#section-5-1" class="pilcrow">¶</a></p>
+</section>
+</div>
+<section id="section-6">
+      <h2 id="name-references">
+<a href="#section-6" class="section-number selfRef">6. </a><a href="#name-references" class="section-name selfRef">References</a>
+      </h2>
+<section id="section-6.1">
+        <h3 id="name-normative-references">
+<a href="#section-6.1" class="section-number selfRef">6.1. </a><a href="#name-normative-references" class="section-name selfRef">Normative References</a>
+        </h3>
+<dl class="references">
+<dt id="RFC2119">[RFC2119]</dt>
+        <dd>
+<span class="refAuthor">Bradner, S.</span>, <span class="refTitle">"Key words for use in RFCs to Indicate Requirement Levels"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 2119</span>, <span class="seriesInfo">DOI 10.17487/RFC2119</span>, <time datetime="1997-03" class="refDate">March 1997</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2119">https://www.rfc-editor.org/info/rfc2119</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8174">[RFC8174]</dt>
+      <dd>
+<span class="refAuthor">Leiba, B.</span>, <span class="refTitle">"Ambiguity of Uppercase vs Lowercase in RFC 2119 Key Words"</span>, <span class="seriesInfo">BCP 14</span>, <span class="seriesInfo">RFC 8174</span>, <span class="seriesInfo">DOI 10.17487/RFC8174</span>, <time datetime="2017-05" class="refDate">May 2017</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8174">https://www.rfc-editor.org/info/rfc8174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+<section id="section-6.2">
+        <h3 id="name-informative-references">
+<a href="#section-6.2" class="section-number selfRef">6.2. </a><a href="#name-informative-references" class="section-name selfRef">Informative References</a>
+        </h3>
+<dl class="references">
+<dt id="CCSDS-BP">[CCSDS-BP]</dt>
+        <dd>
+<span class="refAuthor">Consultative Committee for Space Data Systems</span>, <span class="refTitle">"CCSDS Bundle Protocol Specification"</span>, <span class="seriesInfo">CCSDS 734.2-B-1</span>, <time datetime="2015-09" class="refDate">September 2015</time>, <span>&lt;<a href="https://public.ccsds.org/Pubs/734x2b1.pdf">https://public.ccsds.org/Pubs/734x2b1.pdf</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC2675">[RFC2675]</dt>
+        <dd>
+<span class="refAuthor">Borman, D.</span>, <span class="refAuthor">Deering, S.</span>, and <span class="refAuthor">R. Hinden</span>, <span class="refTitle">"IPv6 Jumbograms"</span>, <span class="seriesInfo">RFC 2675</span>, <span class="seriesInfo">DOI 10.17487/RFC2675</span>, <time datetime="1999-08" class="refDate">August 1999</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc2675">https://www.rfc-editor.org/info/rfc2675</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5326">[RFC5326]</dt>
+        <dd>
+<span class="refAuthor">Ramadas, M.</span>, <span class="refAuthor">Burleigh, S.</span>, and <span class="refAuthor">S. Farrell</span>, <span class="refTitle">"Licklider Transmission Protocol - Specification"</span>, <span class="seriesInfo">RFC 5326</span>, <span class="seriesInfo">DOI 10.17487/RFC5326</span>, <time datetime="2008-09" class="refDate">September 2008</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5326">https://www.rfc-editor.org/info/rfc5326</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC5740">[RFC5740]</dt>
+        <dd>
+<span class="refAuthor">Adamson, B.</span>, <span class="refAuthor">Bormann, C.</span>, <span class="refAuthor">Handley, M.</span>, and <span class="refAuthor">J. Macker</span>, <span class="refTitle">"NACK-Oriented Reliable Multicast (NORM) Transport Protocol"</span>, <span class="seriesInfo">RFC 5740</span>, <span class="seriesInfo">DOI 10.17487/RFC5740</span>, <time datetime="2009-11" class="refDate">November 2009</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc5740">https://www.rfc-editor.org/info/rfc5740</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7122">[RFC7122]</dt>
+        <dd>
+<span class="refAuthor">Kruse, H.</span>, <span class="refAuthor">Jero, S.</span>, and <span class="refAuthor">S. Ostermann</span>, <span class="refTitle">"Datagram Convergence Layers for the Delay- and Disruption-Tolerant Networking (DTN) Bundle Protocol and Licklider Transmission Protocol (LTP)"</span>, <span class="seriesInfo">RFC 7122</span>, <span class="seriesInfo">DOI 10.17487/RFC7122</span>, <time datetime="2014-03" class="refDate">March 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7122">https://www.rfc-editor.org/info/rfc7122</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7242">[RFC7242]</dt>
+        <dd>
+<span class="refAuthor">Demmer, M.</span>, <span class="refAuthor">Ott, J.</span>, and <span class="refAuthor">S. Perreault</span>, <span class="refTitle">"Delay-Tolerant Networking TCP Convergence-Layer Protocol"</span>, <span class="seriesInfo">RFC 7242</span>, <span class="seriesInfo">DOI 10.17487/RFC7242</span>, <time datetime="2014-06" class="refDate">June 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7242">https://www.rfc-editor.org/info/rfc7242</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC7435">[RFC7435]</dt>
+        <dd>
+<span class="refAuthor">Dukhovni, V.</span>, <span class="refTitle">"Opportunistic Security: Some Protection Most of the Time"</span>, <span class="seriesInfo">RFC 7435</span>, <span class="seriesInfo">DOI 10.17487/RFC7435</span>, <time datetime="2014-12" class="refDate">December 2014</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc7435">https://www.rfc-editor.org/info/rfc7435</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC8900">[RFC8900]</dt>
+        <dd>
+<span class="refAuthor">Bonica, R.</span>, <span class="refAuthor">Baker, F.</span>, <span class="refAuthor">Huston, G.</span>, <span class="refAuthor">Hinden, R.</span>, <span class="refAuthor">Troan, O.</span>, and <span class="refAuthor">F. Gont</span>, <span class="refTitle">"IP Fragmentation Considered Fragile"</span>, <span class="seriesInfo">BCP 230</span>, <span class="seriesInfo">RFC 8900</span>, <span class="seriesInfo">DOI 10.17487/RFC8900</span>, <time datetime="2020-09" class="refDate">September 2020</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc8900">https://www.rfc-editor.org/info/rfc8900</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9171">[RFC9171]</dt>
+        <dd>
+<span class="refAuthor">Burleigh, S.</span>, <span class="refAuthor">Fall, K.</span>, and <span class="refAuthor">E. Birrane, III</span>, <span class="refTitle">"Bundle Protocol Version 7"</span>, <span class="seriesInfo">RFC 9171</span>, <span class="seriesInfo">DOI 10.17487/RFC9171</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9171">https://www.rfc-editor.org/info/rfc9171</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="RFC9174">[RFC9174]</dt>
+        <dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refAuthor">Demmer, M.</span>, <span class="refAuthor">Ott, J.</span>, and <span class="refAuthor">S. Perreault</span>, <span class="refTitle">"Delay-Tolerant Networking TCP Convergence-Layer Protocol Version 4"</span>, <span class="seriesInfo">RFC 9174</span>, <span class="seriesInfo">DOI 10.17487/RFC9174</span>, <time datetime="2022-01" class="refDate">January 2022</time>, <span>&lt;<a href="https://www.rfc-editor.org/info/rfc9174">https://www.rfc-editor.org/info/rfc9174</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.ietf-dtn-bibect">[I-D.ietf-dtn-bibect]</dt>
+        <dd>
+<span class="refAuthor">Burleigh, S.</span>, <span class="refTitle">"Bundle-in-Bundle Encapsulation"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-ietf-dtn-bibect-03</span>, <time datetime="2020-02-18" class="refDate">18 February 2020</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-ietf-dtn-bibect-03.txt">https://www.ietf.org/archive/id/draft-ietf-dtn-bibect-03.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+<dt id="I-D.sipos-dtn-udpcl">[I-D.sipos-dtn-udpcl]</dt>
+      <dd>
+<span class="refAuthor">Sipos, B.</span>, <span class="refTitle">"Delay-Tolerant Networking UDP Convergence Layer Protocol"</span>, <span class="refContent">Work in Progress</span>, <span class="seriesInfo">Internet-Draft, draft-sipos-dtn-udpcl-01</span>, <time datetime="2021-03-26" class="refDate">26 March 2021</time>, <span>&lt;<a href="https://www.ietf.org/archive/id/draft-sipos-dtn-udpcl-01.txt">https://www.ietf.org/archive/id/draft-sipos-dtn-udpcl-01.txt</a>&gt;</span>. </dd>
+<dd class="break"></dd>
+</dl>
+</section>
+</section>
+<div id="sec-applicability">
+<section id="appendix-A">
+      <h2 id="name-applicability-to-existing-c">
+<a href="#appendix-A" class="section-number selfRef">Appendix A. </a><a href="#name-applicability-to-existing-c" class="section-name selfRef">Applicability to Existing Convergence Layers</a>
+      </h2>
+<p id="appendix-A-1">
+This section explains how existing CLs relate to the idealized service model defined in this document.
+In some cases a CL can simply omit optional and non-applicable parts of this model.
+In other cases the CL can deviate from this model in meaningful ways, some by specification and some because of lack of specification of such detail in the CL definition.<a href="#appendix-A-1" class="pilcrow">¶</a></p>
+<section id="appendix-A.1">
+        <h3 id="name-udpcl">
+<a href="#appendix-A.1" class="section-number selfRef">A.1. </a><a href="#name-udpcl" class="section-name selfRef">UDPCL</a>
+        </h3>
+<p id="appendix-A.1-1">
+There are two different "current" definitions of the UDPCL: one in <span><a href="https://rfc-editor.org/rfc/rfc7122#section-3.2.2" class="relref">Section 3.2.2</a> of [<a href="#RFC7122" class="cite xref">RFC7122</a>]</span> which is very vague on details of network addressing and port numbers, and another in Appendix B4 of <span>[<a href="#CCSDS-BP" class="cite xref">CCSDS-BP</a>]</span> which is more specific on some details but still ignores the effects of network middleboxes.<a href="#appendix-A.1-1" class="pilcrow">¶</a></p>
+<aside id="appendix-A.1-2">
+          <p id="appendix-A.1-2.1">
+The updates in <span>[<a href="#I-D.sipos-dtn-udpcl" class="cite xref">I-D.sipos-dtn-udpcl</a>]</span> are intended to address these unspecified behaviors in a way which is compatible with middlebox best practices.<a href="#appendix-A.1-2.1" class="pilcrow">¶</a></p>
+</aside>
+<p id="appendix-A.1-3">
+The UDPCL does not have any notion of a partial transmission or reception so no so will never indicate intermediate Transmission Progress or Reception Progress and has no ability to Interrupt Transmission or Interrupt Reception.
+The UDPCL is unreliable so will never indicate Transmission Failure.
+The UDPCL will never indicate Reception Started with a total size.<a href="#appendix-A.1-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-4">
+The peer transport parameters for the UDPCL are a network host name or address and a UDP port number.<a href="#appendix-A.1-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.1-5">
+The UDPCL does not have a concept of a persistent session, but implementations are encouraged to re-use source port numbers when transmitting to the same peer in order to be compatible with firewalls and other middleboxes.<a href="#appendix-A.1-5" class="pilcrow">¶</a></p>
+</section>
+<section id="appendix-A.2">
+        <h3 id="name-tcpcl">
+<a href="#appendix-A.2" class="section-number selfRef">A.2. </a><a href="#name-tcpcl" class="section-name selfRef">TCPCL</a>
+        </h3>
+<p id="appendix-A.2-1">
+Because they both share the same overall logic and workflow, this section applies to both the current TCPCL version 4 <span>[<a href="#RFC9174" class="cite xref">RFC9174</a>]</span> and the earlier version 3 <span>[<a href="#RFC7242" class="cite xref">RFC7242</a>]</span>.<a href="#appendix-A.2-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-2">
+Although the TCPCL provides a reliable transfer between transmitter CLA and receiver CLA, there is no current requirement that mandates the receiver sending a final <code>XFER_ACK</code> only after the BPA has fully processed it (i.e. it will be either delivered, forwarded, or deleted but not silently dropped).<a href="#appendix-A.2-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-3">
+The TCPCL does not include a <a href="#sec-srv-bundle-tx-begin" class="internal xref">Begin Transmission</a> deadline or the ability to interrupt a transmission.
+There is an assumption in its operation that a single transfer will complete in a short enough time that it will be insignificant compared to a bundle's lifetime.
+This is applicable for small bundles with long lifetimes, but can cause logical issues for large bundles and short lifetimes (relative to the network throughput).<a href="#appendix-A.2-3" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-4">
+The TCPCL will only indicate <a href="#sec-srv-bundle-rx-started" class="internal xref">Reception Started</a> with a total size if the sender of the bundle provided a size in an optional mechanism.
+For TCPCLv3 this is a separate pre-transfer message and for TCPCLv4 this is a transfer extension item.<a href="#appendix-A.2-4" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-5">
+The peer transport parameters for the TCPCL are a network host name or address and a TCP port number.
+A CLA <span class="bcp14">SHOULD NOT</span> make correlation assumptions between sessions to the same network host name or address.
+Only a session-reported Node ID <span class="bcp14">MAY</span> be used by a to correlate between TCPCL sessions.<a href="#appendix-A.2-5" class="pilcrow">¶</a></p>
+<p id="appendix-A.2-6">
+The TCPCL has a concept of a persistent session which agrees with the service model of <a href="#sec-srv-session" class="auto internal xref">Section 3.3</a>.
+While the TCPCL definition is more focused on the mechanics of session keeping and transfers as distinct activities, this document treats session keeping as a subordinate activity to transmissions (<em>i.e.</em>, a CLA is free to transparently reuse a session or establish a new session in support of a transmission request with the same transport parameters).<a href="#appendix-A.2-6" class="pilcrow">¶</a></p>
+</section>
+<section id="appendix-A.3">
+        <h3 id="name-ltpcl">
+<a href="#appendix-A.3" class="section-number selfRef">A.3. </a><a href="#name-ltpcl" class="section-name selfRef">LTPCL</a>
+        </h3>
+<p id="appendix-A.3-1">
+Current LTP implementations do not universally have the concept of a <a href="#sec-srv-bundle-tx-begin" class="internal xref">Begin Transmission</a> deadline and the version zero specification in <span>[<a href="#RFC5326" class="cite xref">RFC5326</a>]</span> <span>[<a href="#RFC7122" class="cite xref">RFC7122</a>]</span> do not mention reasons why a client would cancel a transmitting session.
+LTP has several types of internal segment-to-segment timers for reliable transport, but outside of an explicit transmission deadline a CLA provides no guarantee to the BPA about the aggregate effect of timer durations, backoff durations, OWLT assumptions or retry counts.<a href="#appendix-A.3-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-2">
+The peer transport parameters for the LTPCL-over-UDP are a network host name or address and a UDP port number.
+In some implementations, the peering logic is based on LTP Engine ID rather than transport parameters but ultimately there must be some mapping down to the transport parameters.<a href="#appendix-A.3-2" class="pilcrow">¶</a></p>
+<p id="appendix-A.3-3">
+Although LTP transfers are associated with an "LTP session" this is not a persistent session as defined by <a href="#sec-srv-session" class="auto internal xref">Section 3.3</a>; LTP has no persistent sessions.<a href="#appendix-A.3-3" class="pilcrow">¶</a></p>
+</section>
+<section id="appendix-A.4">
+        <h3 id="name-bibe">
+<a href="#appendix-A.4" class="section-number selfRef">A.4. </a><a href="#name-bibe" class="section-name selfRef">BIBE</a>
+        </h3>
+<p id="appendix-A.4-1">
+The proposed bundle-in-bundle encapsulation (BIBE) service <span>[<a href="#I-D.ietf-dtn-bibect" class="cite xref">I-D.ietf-dtn-bibect</a>]</span> acts as an administrative record type above the Administrative Entity <span>[<a href="#RFC9171" class="cite xref">RFC9171</a>]</span> of a BPA as well as a CLA transport below a BPA.<a href="#appendix-A.4-1" class="pilcrow">¶</a></p>
+<p id="appendix-A.4-2">
+The proposed BIBE transport is atomic (any fragmentation of the encapsulating bundle is not considered to be part of the BIBE layer), so the BIBE will never indicate intermediate Transmission Progress or Reception Progress.
+Also because of that any Transmission Failure will occur immediately after start (as the encapsulating bundle is assembled) and any Reception Failure will occur immediately after start (as the encapsulating bundle payload is decoded).<a href="#appendix-A.4-2" class="pilcrow">¶</a></p>
+</section>
+</section>
+</div>
+<div id="sec-doc-ack">
+<section id="appendix-B">
+      <h2 id="name-acknowledgments">
+<a href="#name-acknowledgments" class="section-name selfRef">Acknowledgments</a>
+      </h2>
+<p id="appendix-B-1"></p>
+</section>
+</div>
+<div id="authors-addresses">
+<section id="appendix-C">
+      <h2 id="name-authors-address">
+<a href="#name-authors-address" class="section-name selfRef">Author's Address</a>
+      </h2>
+<address class="vcard">
+        <div dir="auto" class="left"><span class="fn nameRole">Brian Sipos</span></div>
+<div dir="auto" class="left"><span class="org">The Johns Hopkins University Applied Physics Laboratory</span></div>
+<div dir="auto" class="left"><span class="street-address">11100 Johns Hopkins Rd.</span></div>
+<div dir="auto" class="left">
+<span class="locality">Laurel</span>, <span class="region">MD</span> <span class="postal-code">20723</span>
+</div>
+<div dir="auto" class="left"><span class="country-name">United States of America</span></div>
+<div class="email">
+<span>Email:</span>
+<a href="mailto:brian.sipos+ietf@gmail.com" class="email">brian.sipos+ietf@gmail.com</a>
+</div>
+</address>
+</section>
+</div>
+<script>const toc = document.getElementById("toc");
+toc.querySelector("h2").addEventListener("click", e => {
+  toc.classList.toggle("active");
+});
+toc.querySelector("nav").addEventListener("click", e => {
+  toc.classList.remove("active");
+});
+</script>
+</body>
+</html>
